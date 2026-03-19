@@ -16,22 +16,22 @@ export function AppSidebar() {
   const location = useLocation()
 
   const navItems = [
-    { title: 'Início', url: '/', icon: LayoutDashboard },
-    { title: 'Plataformas', url: '/platforms', icon: Grid },
-    { title: 'Logs de Acesso', url: '/logs', icon: History },
-    { title: 'Configurações', url: '/settings', icon: Settings },
+    { title: 'Overview', url: '/', icon: LayoutDashboard },
+    { title: 'Platforms', url: '/platforms', icon: Grid },
+    { title: 'Access Logs', url: '/logs', icon: History },
+    { title: 'Settings', url: '/settings', icon: Settings },
   ]
 
   return (
-    <Sidebar variant="sidebar" className="border-r border-sidebar-border/30 bg-sidebar">
+    <Sidebar variant="sidebar" className="border-r border-sidebar-border/30 bg-[#070B14]">
       <SidebarHeader className="p-5 border-b border-sidebar-border/20">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_rgba(0,102,255,0.5)]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_rgba(0,102,255,0.6)] border border-primary/50">
             <Command className="h-5 w-5" />
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-tight text-sidebar-foreground">
-              Portal Central
+              Central Portal
             </span>
             <span className="text-xs text-sidebar-foreground/60 font-medium">Acme Corp</span>
           </div>
@@ -49,22 +49,24 @@ export function AppSidebar() {
                   isActive={isActive}
                   tooltip={item.title}
                   className={cn(
-                    'h-10 transition-all duration-200 rounded-md mb-1.5 relative overflow-hidden group/menu-btn',
+                    'h-11 transition-all duration-300 rounded-lg mb-1.5 relative overflow-hidden group/menu-btn',
                     isActive
-                      ? 'bg-primary/10 text-primary shadow-[inset_0_0_20px_rgba(0,102,255,0.05)] before:absolute before:left-0 before:top-0 before:h-full before:w-[3px] before:bg-primary before:rounded-r-full'
-                      : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/40',
+                      ? 'bg-primary/10 text-primary shadow-[inset_0_0_24px_rgba(0,102,255,0.1)] border border-primary/20 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-2/3 before:w-[3px] before:bg-primary before:rounded-r-full before:shadow-[0_0_12px_rgba(0,102,255,0.8)]'
+                      : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/30 hover:border hover:border-sidebar-border/50 border border-transparent',
                   )}
                 >
-                  <Link to={item.url} className="flex items-center gap-3 px-1">
+                  <Link to={item.url} className="flex items-center gap-3 px-2 w-full">
                     <item.icon
                       className={cn(
-                        'h-4 w-4 transition-colors',
+                        'h-4 w-4 transition-all duration-300',
                         isActive
-                          ? 'text-primary drop-shadow-[0_0_10px_rgba(0,102,255,0.5)]'
+                          ? 'text-primary drop-shadow-[0_0_10px_rgba(0,102,255,0.6)] scale-110'
                           : 'text-sidebar-foreground/50 group-hover/menu-btn:text-sidebar-foreground/90',
                       )}
                     />
-                    <span className="font-medium">{item.title}</span>
+                    <span className={cn('font-medium', isActive && 'font-semibold tracking-wide')}>
+                      {item.title}
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -74,21 +76,21 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-4">
-        <div className="flex items-center justify-between rounded-xl bg-sidebar-accent/10 p-2.5 border border-sidebar-border/20 hover:bg-sidebar-accent/30 hover:border-sidebar-border/40 transition-all cursor-pointer">
+        <div className="flex items-center justify-between rounded-xl bg-sidebar-accent/10 p-2.5 border border-sidebar-border/20 hover:bg-sidebar-accent/30 hover:border-sidebar-border/50 transition-all cursor-pointer group">
           <div className="flex items-center gap-3">
-            <Avatar className="h-9 w-9 border border-sidebar-border/50 shadow-sm">
+            <Avatar className="h-9 w-9 border border-sidebar-border/50 shadow-sm group-hover:border-primary/30 transition-colors">
               <AvatarImage
                 src="https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1"
-                alt="Usuário"
+                alt="User"
               />
               <AvatarFallback>AS</AvatarFallback>
             </Avatar>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-semibold leading-none text-sidebar-foreground truncate">
+              <span className="text-sm font-semibold leading-none text-sidebar-foreground truncate group-hover:text-primary transition-colors">
                 Arthur Silva
               </span>
               <span className="text-xs text-sidebar-foreground/50 mt-1.5 font-medium truncate">
-                Administrador
+                Administrator
               </span>
             </div>
           </div>

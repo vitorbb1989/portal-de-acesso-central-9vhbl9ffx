@@ -19,8 +19,8 @@ export function AppHeader() {
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Pesquisar plataforma... (Cmd+K)"
-            className="w-full bg-secondary/30 border-primary/10 focus-visible:bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary/20 pl-10 rounded-full h-9 shadow-sm"
+            placeholder="Search platform... (Cmd+K)"
+            className="w-full bg-secondary/30 border-primary/10 focus-visible:bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary/20 pl-10 rounded-full h-9 shadow-sm transition-all"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -30,7 +30,7 @@ export function AppHeader() {
         <div className="flex sm:hidden flex-1">
           <Input
             type="search"
-            placeholder="Pesquisar..."
+            placeholder="Search..."
             className="w-full bg-secondary/30 border-primary/10 h-9 rounded-full px-4"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -40,7 +40,7 @@ export function AppHeader() {
         <div className="flex items-center gap-3 ml-4">
           <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-status-success/10 border border-status-success/20">
             <div className="h-2 w-2 rounded-full bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse-slow" />
-            <span className="text-xs font-medium text-status-success">Todos sistemas online</span>
+            <span className="text-xs font-medium text-status-success">All systems online</span>
           </div>
 
           <Button

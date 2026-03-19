@@ -15,10 +15,8 @@ const Platforms = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight mb-2">Plataformas</h1>
-        <p className="text-muted-foreground">
-          Diretório completo de ferramentas e serviços internos.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight mb-2">Platforms</h1>
+        <p className="text-muted-foreground">Complete directory of internal tools and services.</p>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -29,7 +27,7 @@ const Platforms = () => {
           className="w-full sm:w-auto"
         >
           <TabsList className="bg-secondary/50">
-            <TabsTrigger value="all">Todas</TabsTrigger>
+            <TabsTrigger value="all">All</TabsTrigger>
             {categories.map((cat) => (
               <TabsTrigger key={cat} value={cat}>
                 {cat}
@@ -38,7 +36,7 @@ const Platforms = () => {
           </TabsList>
         </Tabs>
         <span className="text-sm text-muted-foreground font-medium">
-          {filteredPlatforms.length} {filteredPlatforms.length === 1 ? 'plataforma' : 'plataformas'}
+          {filteredPlatforms.length} {filteredPlatforms.length === 1 ? 'platform' : 'platforms'}
         </span>
       </div>
 
@@ -50,7 +48,7 @@ const Platforms = () => {
         </div>
       ) : (
         <div className="py-20 text-center bg-secondary/30 rounded-xl border border-dashed">
-          <p className="text-muted-foreground">Nenhuma plataforma encontrada nesta categoria.</p>
+          <p className="text-muted-foreground">No platforms found in this category.</p>
         </div>
       )}
     </div>
