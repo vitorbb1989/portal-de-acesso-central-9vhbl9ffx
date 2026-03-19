@@ -1,6 +1,6 @@
 import { useAppStore } from '@/stores/main'
 import { PlatformCard } from '@/components/PlatformCard'
-import { ArrowRight, Clock } from 'lucide-react'
+import { ArrowRight, Clock, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 
@@ -11,36 +11,48 @@ const Index = () => {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      <section className="flex flex-col gap-5 pb-6 border-b border-border/50 relative">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-            Portal AntropIA
-          </h1>
-          <p className="text-muted-foreground text-lg">
-            Todos os sistemas atribuídos ao seu workspace estão operando normalmente.
-          </p>
+      <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 pb-6 border-b border-border/50 relative">
+        <div className="flex flex-col gap-5">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
+              Portal AntropIA
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              Todos os sistemas atribuídos ao seu workspace estão operando normalmente.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 mt-2">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
+              <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+                Workspace
+              </span>
+              <span className="text-sm font-medium text-foreground">AntropIA Corp</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
+              <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+                Plano
+              </span>
+              <span className="text-sm font-medium text-primary">Enterprise</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
+              <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+                Módulos Ativos
+              </span>
+              <span className="text-sm font-medium text-foreground">{platforms.length}</span>
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 mt-2">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
-            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
-              Workspace
-            </span>
-            <span className="text-sm font-medium text-foreground">AntropIA Corp</span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
-            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
-              Plano
-            </span>
-            <span className="text-sm font-medium text-primary">Enterprise</span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
-            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
-              Módulos Ativos
-            </span>
-            <span className="text-sm font-medium text-foreground">4</span>
-          </div>
-        </div>
+        <Button
+          asChild
+          className="shadow-[0_4px_14px_0_rgba(0,102,255,0.25)] hover:shadow-[0_6px_20px_rgba(0,102,255,0.4)] transition-all"
+        >
+          <Link to="/platforms/new">
+            <Plus className="mr-2 h-4 w-4" />
+            Adicionar Plataforma
+          </Link>
+        </Button>
       </section>
 
       {!searchQuery && (
@@ -52,7 +64,9 @@ const Index = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-success opacity-40"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
             </div>
-            <span className="text-sm font-medium text-foreground">4 sistemas operacionais</span>
+            <span className="text-sm font-medium text-foreground">
+              {platforms.filter((p) => p.status === 'online').length} sistemas operacionais
+            </span>
           </div>
 
           <div className="hidden sm:block w-px h-5 bg-border/80" />
@@ -65,7 +79,9 @@ const Index = () => {
               ></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-warning shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
             </div>
-            <span className="text-sm font-medium text-foreground">1 sistema instável</span>
+            <span className="text-sm font-medium text-foreground">
+              {platforms.filter((p) => p.status !== 'online').length} sistema instável
+            </span>
           </div>
 
           <div className="hidden sm:block w-px h-5 bg-border/80" />

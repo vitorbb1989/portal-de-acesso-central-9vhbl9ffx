@@ -31,7 +31,7 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
     },
   }
 
-  const currentStatus = statusConfig[platform.status]
+  const currentStatus = statusConfig[platform.status] || statusConfig.offline
   const Icon = platform.icon
 
   const handleAccess = (e: React.MouseEvent) => {
@@ -54,11 +54,25 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
       onClick={handleAccess}
     >
       <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]" />
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-20 transform scale-x-0 group-hover:scale-x-100" />
+      <div
+        className="absolute top-0 left-0 w-full h-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-20 transform scale-x-0 group-hover:scale-x-100"
+        style={{
+          background: platform.color
+            ? `linear-gradient(to right, transparent, ${platform.color}, transparent)`
+            : 'linear-gradient(to right, transparent, hsl(var(--primary)), transparent)',
+        }}
+      />
 
       <CardHeader className="p-6 pb-0 flex flex-row items-start justify-between space-y-0 relative z-10">
-        <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center text-primary transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.04)] group-hover:border-primary/30 group-hover:shadow-[0_0_20px_rgba(0,102,255,0.2)] group-hover:scale-[1.03]">
-          <Icon className="h-6 w-6" strokeWidth={1.5} />
+        <div
+          className="h-12 w-12 rounded-xl bg-white flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.04)] group-hover:shadow-[0_0_20px_rgba(0,102,255,0.2)] group-hover:scale-[1.03]"
+          style={
+            platform.color
+              ? { color: platform.color, borderColor: `${platform.color}40` }
+              : { color: 'hsl(var(--primary))' }
+          }
+        >
+          {Icon && <Icon className="h-6 w-6" strokeWidth={1.5} />}
         </div>
         <div className="flex items-center space-x-2 bg-white/90 px-2.5 py-1.5 rounded-full border border-black/[0.03] shadow-sm backdrop-blur-md">
           <div className="relative flex h-2.5 w-2.5 items-center justify-center">
@@ -85,15 +99,15 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
 
       <CardContent className="p-6 pt-5 flex-grow flex flex-col relative z-10">
         <h3 className="font-semibold text-lg tracking-tight mb-2 group-hover:text-primary transition-colors duration-300">
-          {platform.name}
+          {platform.name || 'Sem Nome'}
         </h3>
         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-6 flex-grow">
-          {platform.description}
+          {platform.description || 'Nenhuma descrição fornecida.'}
         </p>
 
         <div className="pt-4 border-t border-black/[0.04] flex items-center justify-between mt-auto group-hover:border-primary/10 transition-colors duration-300">
           <span className="text-xs text-muted-foreground font-medium bg-black/[0.02] border border-black/[0.04] px-2.5 py-1 rounded-md">
-            {platform.category}
+            {platform.category || 'Geral'}
           </span>
           <Button
             variant="ghost"

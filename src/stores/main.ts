@@ -1,43 +1,49 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { mockPlatforms, mockLogs, Platform, AccessLog } from '@/lib/mock-data'
 
-// A simple global state hook for this MVP
-// In a real app, you might use Zustand or Redux
 let globalSearchQuery = ''
-let listeners: Array<(query: string) => void> = []
+let globalPlatforms = [...mockPlatforms]
+let globalLogs = [...mockLogs]
+let listeners: Array<() => void> = []
+
+function notifyListeners() {
+  listeners.forEach((listener) => listener())
+}
 
 export const useAppStore = () => {
-  const [searchQuery, setLocalSearchQuery] = useState(globalSearchQuery)
-  const [platforms] = useState<Platform[]>(mockPlatforms)
-  const [logs] = useState<AccessLog[]>(mockLogs)
+  const [, setTick] = useState(0)
 
-  const setSearchQuery = useCallback((query: string) => {
-    globalSearchQuery = query
-    setLocalSearchQuery(query)
-    listeners.forEach((listener) => listener(query))
-  }, [])
-
-  // Subscribe to external changes
-  useState(() => {
-    const listener = (newQuery: string) => setLocalSearchQuery(newQuery)
+  useEffect(() => {
+    const listener = () => setTick((t) => t + 1)
     listeners.push(listener)
     return () => {
       listeners = listeners.filter((l) => l !== listener)
     }
-  })
+  }, [])
 
-  const filteredPlatforms = platforms.filter(
+  const setSearchQuery = useCallback((query: string) => {
+    globalSearchQuery = query
+    notifyListeners()
+  }, [])
+
+  const addPlatform = useCallback((platform: Platform) => {
+    globalPlatforms = [platform, ...globalPlatforms]
+    notifyListeners()
+  }, [])
+
+  const filteredPlatforms = globalPlatforms.filter(
     (p) =>
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase()),
+      p.name.toLowerCase().includes(globalSearchQuery.toLowerCase()) ||
+      p.category.toLowerCase().includes(globalSearchQuery.toLowerCase()) ||
+      p.description.toLowerCase().includes(globalSearchQuery.toLowerCase()),
   )
 
   return {
-    searchQuery,
+    searchQuery: globalSearchQuery,
     setSearchQuery,
     platforms: filteredPlatforms,
-    allPlatforms: platforms,
-    logs,
+    allPlatforms: globalPlatforms,
+    logs: globalLogs,
+    addPlatform,
   }
 }

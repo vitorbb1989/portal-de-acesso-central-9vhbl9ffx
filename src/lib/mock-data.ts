@@ -21,9 +21,10 @@ export interface Platform {
   id: string
   name: string
   description: string
-  category: 'Marketing' | 'DevTools' | 'CRM' | 'Infra' | 'Comunicação'
+  category: 'Marketing' | 'DevTools' | 'CRM' | 'Infra' | 'Comunicação' | string
   status: PlatformStatus
   icon: any
+  color?: string
   lastAccessed?: string
   url: string
 }
@@ -44,6 +45,7 @@ export const mockPlatforms: Platform[] = [
     category: 'CRM',
     status: 'online',
     icon: Users,
+    color: '#8B5CF6',
     lastAccessed: 'Há 5 minutos',
     url: 'https://crm.example.com',
   },
@@ -54,6 +56,7 @@ export const mockPlatforms: Platform[] = [
     category: 'Infra',
     status: 'online',
     icon: Cloud,
+    color: '#0066FF',
     lastAccessed: 'Há 1 hora',
     url: 'https://cloud.example.com',
   },
@@ -64,6 +67,7 @@ export const mockPlatforms: Platform[] = [
     category: 'DevTools',
     status: 'warning',
     icon: Terminal,
+    color: '#F59E0B',
     lastAccessed: 'Há 2 horas',
     url: 'https://ci.example.com',
   },
@@ -74,6 +78,7 @@ export const mockPlatforms: Platform[] = [
     category: 'Marketing',
     status: 'online',
     icon: BarChart3,
+    color: '#10B981',
     lastAccessed: 'Ontem',
     url: 'https://metrics.example.com',
   },
@@ -84,6 +89,7 @@ export const mockPlatforms: Platform[] = [
     category: 'Comunicação',
     status: 'online',
     icon: MessageSquare,
+    color: '#F43F5E',
     lastAccessed: 'Há 10 minutos',
     url: 'https://chat.example.com',
   },
@@ -114,6 +120,7 @@ export const mockPlatforms: Platform[] = [
     category: 'Infra',
     status: 'online',
     icon: Database,
+    color: '#0066FF',
     lastAccessed: 'Há 1 dia',
     url: 'https://dw.example.com',
   },
