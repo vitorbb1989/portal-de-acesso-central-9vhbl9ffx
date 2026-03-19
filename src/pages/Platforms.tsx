@@ -14,9 +14,9 @@ const Platforms = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="pb-4 border-b border-border/40">
-        <h1 className="text-2xl font-semibold tracking-tight mb-1">Diretório de Plataformas</h1>
-        <p className="text-sm text-muted-foreground">
+      <div className="pb-5 border-b border-border">
+        <h1 className="text-2xl font-bold tracking-tight mb-1">Diretório de Plataformas</h1>
+        <p className="text-sm font-medium text-muted-foreground">
           Acesse e gerencie todas as ferramentas integradas ao seu workspace.
         </p>
       </div>
@@ -28,10 +28,10 @@ const Platforms = () => {
           onValueChange={setActiveTab}
           className="w-full sm:w-auto"
         >
-          <TabsList className="bg-secondary/40 border border-border/40 h-8">
+          <TabsList className="bg-secondary/50 border border-border h-9 p-1">
             <TabsTrigger
               value="all"
-              className="text-xs px-3 py-1 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              className="text-xs font-bold px-4 py-1.5 data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm rounded"
             >
               Todas
             </TabsTrigger>
@@ -39,14 +39,14 @@ const Platforms = () => {
               <TabsTrigger
                 key={cat}
                 value={cat}
-                className="text-xs px-3 py-1 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                className="text-xs font-bold px-4 py-1.5 data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm rounded"
               >
                 {cat}
               </TabsTrigger>
             ))}
           </TabsList>
         </Tabs>
-        <span className="text-xs text-muted-foreground font-medium bg-secondary/30 px-2 py-1 rounded border border-border/40">
+        <span className="text-xs text-foreground font-bold bg-card px-3 py-1.5 rounded-md border border-border shadow-sm">
           {filteredPlatforms.length} {filteredPlatforms.length === 1 ? 'item' : 'itens'}
         </span>
       </div>
@@ -58,8 +58,8 @@ const Platforms = () => {
           ))}
         </div>
       ) : (
-        <div className="py-16 text-center bg-secondary/20 rounded-lg border border-dashed border-border/60">
-          <p className="text-sm text-muted-foreground">
+        <div className="py-16 text-center bg-secondary/30 rounded-xl border border-dashed border-border">
+          <p className="text-sm font-medium text-muted-foreground">
             Nenhuma plataforma encontrada nesta visualização.
           </p>
         </div>

@@ -16,23 +16,40 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
   const statusConfig = {
     online: {
       color: 'bg-status-success',
-      glow: 'shadow-[0_0_8px_rgba(16,185,129,0.3)]',
+      glow: 'shadow-[0_0_8px_rgba(16,185,129,0.4)]',
       label: 'Operacional',
     },
     warning: {
       color: 'bg-status-warning',
-      glow: 'shadow-[0_0_8px_rgba(245,158,11,0.3)]',
+      glow: 'shadow-[0_0_8px_rgba(245,158,11,0.4)]',
       label: 'Instável',
     },
     offline: {
       color: 'bg-status-error',
-      glow: 'shadow-[0_0_8px_rgba(239,68,68,0.3)]',
+      glow: 'shadow-[0_0_8px_rgba(239,68,68,0.4)]',
       label: 'Inativo',
     },
   }
 
   const currentStatus = statusConfig[platform.status] || statusConfig.offline
   const Icon = platform.icon
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'CRM':
+        return 'bg-violet-100 text-violet-700 group-hover:bg-violet-200 group-focus:bg-violet-200'
+      case 'Infra':
+        return 'bg-blue-100 text-blue-700 group-hover:bg-blue-200 group-focus:bg-blue-200'
+      case 'DevTools':
+        return 'bg-amber-100 text-amber-700 group-hover:bg-amber-200 group-focus:bg-amber-200'
+      case 'Marketing':
+        return 'bg-emerald-100 text-emerald-700 group-hover:bg-emerald-200 group-focus:bg-emerald-200'
+      case 'Comunicação':
+        return 'bg-rose-100 text-rose-700 group-hover:bg-rose-200 group-focus:bg-rose-200'
+      default:
+        return 'bg-slate-100 text-slate-700 group-hover:bg-slate-200 group-focus:bg-slate-200'
+    }
+  }
 
   const handleAccess = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -43,31 +60,37 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
     }, 800)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleAccess(e as any)
+    }
+  }
+
   return (
     <Card
+      tabIndex={0}
+      role="button"
+      onKeyDown={handleKeyDown}
+      onClick={handleAccess}
       className={cn(
-        'group relative overflow-hidden transition-all duration-200 ease-out h-full flex flex-col animate-fade-in cursor-pointer',
-        'bg-card border-border/60 shadow-sm',
-        'hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md hover:ring-1 hover:ring-primary/10',
+        'group relative overflow-hidden transition-all duration-200 ease-out h-full flex flex-col animate-fade-in outline-none cursor-pointer',
+        'bg-card border-border shadow-sm',
+        'hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_8px_24px_-12px_rgba(0,102,255,0.4)]',
+        'focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-primary/[0.02]',
       )}
       style={{ animationDelay: `${index * 40}ms` }}
-      onClick={handleAccess}
     >
       <CardHeader className="p-5 pb-3 flex flex-row items-center justify-between space-y-0">
         <div
           className={cn(
-            'h-10 w-10 rounded-lg flex items-center justify-center border border-border/40 bg-secondary/30 transition-colors duration-200',
-            'group-hover:bg-primary/[0.04] group-hover:border-primary/20',
+            'h-11 w-11 rounded-xl flex items-center justify-center transition-colors duration-200',
+            getCategoryColor(platform.category),
           )}
         >
-          {Icon && (
-            <Icon
-              className="h-5 w-5 text-foreground/70 group-hover:text-primary transition-colors duration-200"
-              strokeWidth={1.5}
-            />
-          )}
+          {Icon && <Icon className="h-5 w-5" strokeWidth={2.5} />}
         </div>
-        <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-secondary/40 border border-border/30">
+        <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-background border border-border shadow-sm">
           <div className="relative flex h-2 w-2 items-center justify-center">
             {platform.status !== 'offline' && (
               <span
@@ -86,28 +109,34 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
               )}
             />
           </div>
-          <span className="text-[11px] font-medium text-muted-foreground">
+          <span className="text-[11px] font-bold text-foreground tracking-wide">
             {currentStatus.label}
           </span>
         </div>
       </CardHeader>
 
       <CardContent className="p-5 pt-2 flex-grow flex flex-col">
-        <h3 className="font-semibold text-base tracking-tight mb-1 text-foreground/90 group-hover:text-primary transition-colors duration-200">
+        <h3 className="font-bold text-base tracking-tight mb-1.5 text-foreground group-hover:text-primary group-focus:text-primary transition-colors duration-200">
           {platform.name || 'Não identificado'}
         </h3>
-        <p className="text-[13px] text-muted-foreground leading-snug line-clamp-2 mb-4 flex-grow">
+        <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-2 mb-4 flex-grow font-medium">
           {platform.description || 'Sem descrição.'}
         </p>
 
-        <div className="pt-4 border-t border-border/40 flex items-center justify-between mt-auto group-hover:border-primary/10 transition-colors duration-200">
-          <span className="text-[11px] text-muted-foreground font-medium px-2 py-0.5 rounded-md bg-secondary/30 border border-border/40">
+        <div className="pt-4 border-t border-border flex items-center justify-between mt-auto transition-colors duration-200">
+          <span className="text-[11px] font-bold tracking-wide uppercase px-2 py-1 rounded-md bg-secondary text-secondary-foreground border border-border/50">
             {platform.category || 'Geral'}
           </span>
           <Button
-            variant="ghost"
             size="sm"
-            className="h-7 px-2.5 text-[12px] font-medium text-primary opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-out hover:bg-primary/10"
+            tabIndex={-1}
+            className={cn(
+              'h-8 px-3.5 text-xs font-semibold bg-primary/10 text-primary shadow-none',
+              'opacity-0 translate-y-2',
+              'group-hover:opacity-100 group-hover:translate-y-0 hover:bg-primary hover:text-white',
+              'group-focus:opacity-100 group-focus:translate-y-0',
+              'transition-all duration-200 ease-out',
+            )}
             onClick={(e) => {
               e.stopPropagation()
               handleAccess(e)
@@ -115,10 +144,10 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
             disabled={isConnecting}
           >
             {isConnecting ? (
-              <Loader2 className="h-3 w-3 animate-spin" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
               <>
-                Acessar <ExternalLink className="ml-1.5 h-3 w-3" />
+                Acessar <ExternalLink className="ml-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
               </>
             )}
           </Button>
@@ -126,10 +155,10 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
       </CardContent>
 
       {isConnecting && (
-        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center z-30 animate-fade-in">
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px] flex items-center justify-center z-30 animate-fade-in">
           <div className="flex flex-col items-center text-primary">
-            <Loader2 className="h-6 w-6 animate-spin mb-2" />
-            <span className="text-xs font-medium">Autenticando...</span>
+            <Loader2 className="h-8 w-8 animate-spin mb-3" strokeWidth={3} />
+            <span className="text-sm font-bold">Autenticando...</span>
           </div>
         </div>
       )}
