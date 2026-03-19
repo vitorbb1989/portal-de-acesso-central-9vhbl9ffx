@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 
 const Index = () => {
-  const { platforms, searchQuery, isLoading, error, retryFetch } = useAppStore()
+  const { platforms, searchQuery, isLoading, error, retryFetch, branding } = useAppStore()
 
   const displayedPlatforms = searchQuery ? platforms : platforms.slice(0, 4)
 
@@ -65,7 +65,7 @@ const Index = () => {
         <div className="flex flex-col gap-3">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground mb-1">
-              Portal AntropIA
+              Portal {branding?.name || 'AntropIA'}
             </h1>
             <p className="text-sm font-medium text-muted-foreground">
               Sistemas atribuídos ao seu workspace operando normalmente.
@@ -77,7 +77,9 @@ const Index = () => {
               <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">
                 Workspace
               </span>
-              <span className="text-xs font-bold text-foreground">AntropIA Corp</span>
+              <span className="text-xs font-bold text-foreground">
+                {branding?.name || 'AntropIA'} Corp
+              </span>
             </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-card rounded-md border border-border shadow-sm">
               <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">

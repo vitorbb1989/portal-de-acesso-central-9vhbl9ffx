@@ -1,9 +1,25 @@
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { AppSidebar } from './AppSidebar'
 import { AppHeader } from './AppHeader'
+import { useAppStore } from '@/stores/main'
 
 export default function Layout() {
+  const { branding } = useAppStore()
+
+  useEffect(() => {
+    if (branding?.faviconUrl) {
+      let link: HTMLLinkElement | null = document.querySelector("link[rel~='icon']")
+      if (!link) {
+        link = document.createElement('link')
+        link.rel = 'icon'
+        document.head.appendChild(link)
+      }
+      link.href = branding.faviconUrl
+    }
+  }, [branding?.faviconUrl])
+
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />

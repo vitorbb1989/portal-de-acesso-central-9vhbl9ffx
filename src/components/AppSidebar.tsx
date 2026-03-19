@@ -16,7 +16,7 @@ import { useAppStore } from '@/stores/main'
 
 export function AppSidebar() {
   const location = useLocation()
-  const { isLoading } = useAppStore()
+  const { isLoading, branding } = useAppStore()
 
   const navItems = [
     { title: 'Visão Geral', url: '/', icon: LayoutDashboard },
@@ -29,16 +29,37 @@ export function AppSidebar() {
     <Sidebar variant="sidebar" className="border-r border-sidebar-border">
       <SidebarHeader className="p-5 border-b border-sidebar-border">
         <div className="flex items-center gap-3 px-1">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_12px_rgba(0,102,255,0.4)]">
-            <Command className="h-5 w-5" strokeWidth={2.5} />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-base font-bold tracking-tight text-sidebar-foreground">
-              AntropIA
-            </span>
-            <span className="text-[11px] text-sidebar-foreground/70 font-semibold tracking-wide uppercase mt-0.5">
-              Portal Central
-            </span>
+          {branding?.iconUrl ? (
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10 p-1 shadow-[0_0_12px_rgba(255,255,255,0.1)] border border-white/20">
+              <img
+                src={branding.iconUrl}
+                alt={branding?.name || 'Icon'}
+                className="h-full w-full object-contain drop-shadow-md"
+              />
+            </div>
+          ) : (
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_12px_rgba(0,102,255,0.4)]">
+              <Command className="h-5 w-5" strokeWidth={2.5} />
+            </div>
+          )}
+
+          <div className="flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden">
+            {branding?.logoUrl ? (
+              <img
+                src={branding.logoUrl}
+                alt={branding?.name || 'Logo'}
+                className="h-7 w-auto object-left object-contain"
+              />
+            ) : (
+              <>
+                <span className="text-base font-bold tracking-tight text-sidebar-foreground truncate">
+                  {branding?.name || 'AntropIA'}
+                </span>
+                <span className="text-[11px] text-sidebar-foreground/70 font-semibold tracking-wide uppercase mt-0.5 truncate">
+                  {branding?.subtitle || 'Portal Central'}
+                </span>
+              </>
+            )}
           </div>
         </div>
       </SidebarHeader>

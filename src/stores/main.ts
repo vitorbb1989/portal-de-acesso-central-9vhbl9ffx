@@ -1,9 +1,17 @@
 import { useState, useCallback, useEffect } from 'react'
-import { mockPlatforms, mockLogs, Platform, AccessLog } from '@/lib/mock-data'
+import {
+  mockPlatforms,
+  mockLogs,
+  mockBranding,
+  Platform,
+  AccessLog,
+  BrandingConfig,
+} from '@/lib/mock-data'
 
 let globalSearchQuery = ''
 let globalPlatforms: Platform[] = []
 let globalLogs: AccessLog[] = []
+let globalBranding: BrandingConfig = { ...mockBranding }
 let globalIsLoading = true
 let globalError: string | null = null
 let listeners: Array<() => void> = []
@@ -23,6 +31,7 @@ function initData() {
     // Simulating API integration loading delay
     globalPlatforms = [...mockPlatforms]
     globalLogs = [...mockLogs]
+    globalBranding = { ...mockBranding }
     globalIsLoading = false
     notifyListeners()
   }, 1000)
@@ -71,6 +80,7 @@ export const useAppStore = () => {
     platforms: filteredPlatforms,
     allPlatforms: globalPlatforms,
     logs: globalLogs,
+    branding: globalBranding,
     addPlatform,
     isLoading: globalIsLoading,
     error: globalError,

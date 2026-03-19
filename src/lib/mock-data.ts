@@ -38,11 +38,27 @@ export interface AccessLog {
   ip: string
 }
 
+export interface BrandingConfig {
+  name: string
+  subtitle?: string
+  logoUrl?: string
+  iconUrl?: string
+  faviconUrl?: string
+}
+
 export const mockContext = {
   currentRoute: {
     path: '/',
     component: 'Index',
   },
+}
+
+export const mockBranding: BrandingConfig = {
+  name: 'OmniStack',
+  subtitle: 'Enterprise Gateway',
+  logoUrl: '', // Leave empty to demonstrate the stylized text fallback
+  iconUrl: 'https://img.usecurling.com/i?q=hexagon&shape=fill&color=blue',
+  faviconUrl: 'https://img.usecurling.com/i?q=hexagon&shape=fill&color=blue',
 }
 
 export const mockPlatforms: Platform[] = [
