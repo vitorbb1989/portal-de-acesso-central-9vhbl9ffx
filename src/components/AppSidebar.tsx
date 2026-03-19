@@ -31,9 +31,9 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-tight text-sidebar-foreground">
-              Portal Central
+              AntropIA
             </span>
-            <span className="text-xs text-sidebar-foreground/60 font-medium">Acme Corp</span>
+            <span className="text-xs text-sidebar-foreground/60 font-medium">Portal Central</span>
           </div>
         </div>
       </SidebarHeader>

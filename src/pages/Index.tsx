@@ -14,7 +14,7 @@ const Index = () => {
       <section className="flex flex-col gap-5 pb-6 border-b border-border/50 relative">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-            Seu workspace está totalmente operacional
+            Portal AntropIA
           </h1>
           <p className="text-muted-foreground text-lg">
             Todos os sistemas atribuídos ao seu workspace estão operando normalmente.
@@ -26,13 +26,13 @@ const Index = () => {
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
               Workspace
             </span>
-            <span className="text-sm font-medium text-foreground">Acme Corp</span>
+            <span className="text-sm font-medium text-foreground">AntropIA Corp</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
               Plano
             </span>
-            <span className="text-sm font-medium text-primary">Professional</span>
+            <span className="text-sm font-medium text-primary">Enterprise</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
@@ -49,10 +49,10 @@ const Index = () => {
 
           <div className="flex items-center gap-3">
             <div className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-success opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-success shadow-[0_0_12px_rgba(16,185,129,0.8)]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-success opacity-40"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
             </div>
-            <span className="text-sm font-medium text-foreground">4 plataformas disponíveis</span>
+            <span className="text-sm font-medium text-foreground">4 sistemas operacionais</span>
           </div>
 
           <div className="hidden sm:block w-px h-5 bg-border/80" />
@@ -60,10 +60,10 @@ const Index = () => {
           <div className="flex items-center gap-3">
             <div className="relative flex h-2.5 w-2.5">
               <span
-                className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-warning opacity-40"
+                className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-warning opacity-30"
                 style={{ animationDuration: '3s' }}
               ></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-warning shadow-[0_0_12px_rgba(245,158,11,0.8)]"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-warning shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
             </div>
             <span className="text-sm font-medium text-foreground">1 sistema instável</span>
           </div>
