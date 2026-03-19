@@ -1,0 +1,158 @@
+import {
+  Activity,
+  BarChart3,
+  Box,
+  Cloud,
+  Code2,
+  Database,
+  Globe,
+  LayoutDashboard,
+  Mail,
+  MessageSquare,
+  Server,
+  Shield,
+  Terminal,
+  Users,
+} from 'lucide-react'
+
+export type PlatformStatus = 'online' | 'warning' | 'offline'
+
+export interface Platform {
+  id: string
+  name: string
+  description: string
+  category: 'Marketing' | 'DevTools' | 'CRM' | 'Infra' | 'Comunicação'
+  status: PlatformStatus
+  icon: any
+  lastAccessed?: string
+  url: string
+}
+
+export interface AccessLog {
+  id: string
+  user: string
+  platform: string
+  timestamp: string
+  ip: string
+}
+
+export const mockPlatforms: Platform[] = [
+  {
+    id: '1',
+    name: 'CustomerHub',
+    description: 'Gestão de relacionamento com clientes e leads.',
+    category: 'CRM',
+    status: 'online',
+    icon: Users,
+    lastAccessed: 'Há 5 minutos',
+    url: 'https://crm.example.com',
+  },
+  {
+    id: '2',
+    name: 'CloudConsole',
+    description: 'Painel de controle de infraestrutura em nuvem.',
+    category: 'Infra',
+    status: 'online',
+    icon: Cloud,
+    lastAccessed: 'Há 1 hora',
+    url: 'https://cloud.example.com',
+  },
+  {
+    id: '3',
+    name: 'DeployMaster',
+    description: 'Pipeline de CI/CD e gestão de deploys.',
+    category: 'DevTools',
+    status: 'warning',
+    icon: Terminal,
+    lastAccessed: 'Há 2 horas',
+    url: 'https://ci.example.com',
+  },
+  {
+    id: '4',
+    name: 'MetricsPro',
+    description: 'Análise de dados e visualização de métricas de negócio.',
+    category: 'Marketing',
+    status: 'online',
+    icon: BarChart3,
+    lastAccessed: 'Ontem',
+    url: 'https://metrics.example.com',
+  },
+  {
+    id: '5',
+    name: 'TeamChat',
+    description: 'Comunicação interna e canais de equipe.',
+    category: 'Comunicação',
+    status: 'online',
+    icon: MessageSquare,
+    lastAccessed: 'Há 10 minutos',
+    url: 'https://chat.example.com',
+  },
+  {
+    id: '6',
+    name: 'SecureVault',
+    description: 'Gerenciamento de segredos e acessos sensíveis.',
+    category: 'Infra',
+    status: 'offline',
+    icon: Shield,
+    lastAccessed: 'Há 3 dias',
+    url: 'https://vault.example.com',
+  },
+  {
+    id: '7',
+    name: 'EmailCampaigns',
+    description: 'Plataforma de disparo e automação de e-mails.',
+    category: 'Marketing',
+    status: 'online',
+    icon: Mail,
+    lastAccessed: 'Há 4 horas',
+    url: 'https://email.example.com',
+  },
+  {
+    id: '8',
+    name: 'DataWarehouse',
+    description: 'Acesso unificado aos bancos de dados analíticos.',
+    category: 'Infra',
+    status: 'online',
+    icon: Database,
+    lastAccessed: 'Há 1 dia',
+    url: 'https://dw.example.com',
+  },
+]
+
+export const mockLogs: AccessLog[] = [
+  {
+    id: 'l1',
+    user: 'Ana Silva',
+    platform: 'CustomerHub',
+    timestamp: '2023-10-27 14:32:01',
+    ip: '192.168.1.45',
+  },
+  {
+    id: 'l2',
+    user: 'Carlos Gomes',
+    platform: 'CloudConsole',
+    timestamp: '2023-10-27 14:15:22',
+    ip: '10.0.0.12',
+  },
+  {
+    id: 'l3',
+    user: 'Ana Silva',
+    platform: 'TeamChat',
+    timestamp: '2023-10-27 13:45:10',
+    ip: '192.168.1.45',
+  },
+  {
+    id: 'l4',
+    user: 'Marcos Costa',
+    platform: 'DeployMaster',
+    timestamp: '2023-10-27 11:20:05',
+    ip: '172.16.0.8',
+  },
+  {
+    id: 'l5',
+    user: 'Juliana Paes',
+    platform: 'MetricsPro',
+    timestamp: '2023-10-27 09:10:33',
+    ip: '192.168.1.102',
+  },
+]
