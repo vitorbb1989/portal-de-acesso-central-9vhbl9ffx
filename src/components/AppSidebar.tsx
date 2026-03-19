@@ -23,22 +23,24 @@ export function AppSidebar() {
   ]
 
   return (
-    <Sidebar variant="sidebar" className="border-r border-sidebar-border/30 bg-[#070B14]">
-      <SidebarHeader className="p-5 border-b border-sidebar-border/20">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_rgba(0,102,255,0.6)] border border-primary/50">
-            <Command className="h-5 w-5" />
+    <Sidebar variant="sidebar" className="border-r border-sidebar-border bg-[#0a0a0a]">
+      <SidebarHeader className="p-4 border-b border-sidebar-border/50">
+        <div className="flex items-center gap-3 px-1">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <Command className="h-4 w-4" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-sidebar-foreground">
+            <span className="text-sm font-semibold tracking-tight text-sidebar-foreground">
               AntropIA
             </span>
-            <span className="text-xs text-sidebar-foreground/60 font-medium">Portal Central</span>
+            <span className="text-[11px] text-sidebar-foreground/60 font-medium leading-none mt-0.5">
+              Portal Central
+            </span>
           </div>
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="px-3 pt-6">
+      <SidebarContent className="px-3 pt-5">
         <SidebarMenu>
           {navItems.map((item) => {
             const isActive = location.pathname === item.url
@@ -49,24 +51,23 @@ export function AppSidebar() {
                   isActive={isActive}
                   tooltip={item.title}
                   className={cn(
-                    'h-11 transition-all duration-300 rounded-lg mb-1.5 relative overflow-hidden group/menu-btn',
+                    'h-9 transition-all duration-200 rounded-md mb-0.5 relative group/menu-btn',
                     isActive
-                      ? 'bg-primary/10 text-primary shadow-[inset_0_0_24px_rgba(0,102,255,0.1)] border border-primary/20 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-2/3 before:w-[3px] before:bg-primary before:rounded-r-full before:shadow-[0_0_12px_rgba(0,102,255,0.8)]'
-                      : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/30 hover:border hover:border-sidebar-border/50 border border-transparent',
+                      ? 'bg-primary/10 text-primary font-medium before:absolute before:left-0 before:top-[10%] before:h-[80%] before:w-[3px] before:bg-primary before:rounded-r-sm'
+                      : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50',
                   )}
                 >
                   <Link to={item.url} className="flex items-center gap-3 px-2 w-full">
                     <item.icon
                       className={cn(
-                        'h-4 w-4 transition-all duration-300',
+                        'h-4 w-4 transition-colors',
                         isActive
-                          ? 'text-primary drop-shadow-[0_0_10px_rgba(0,102,255,0.6)] scale-110'
-                          : 'text-sidebar-foreground/50 group-hover/menu-btn:text-sidebar-foreground/90',
+                          ? 'text-primary'
+                          : 'text-sidebar-foreground/50 group-hover/menu-btn:text-sidebar-foreground',
                       )}
+                      strokeWidth={isActive ? 2 : 1.5}
                     />
-                    <span className={cn('font-medium', isActive && 'font-semibold tracking-wide')}>
-                      {item.title}
-                    </span>
+                    <span className="text-sm">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -76,9 +77,9 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-4">
-        <div className="flex items-center justify-between rounded-xl bg-sidebar-accent/10 p-2.5 border border-sidebar-border/20 hover:bg-sidebar-accent/30 hover:border-sidebar-border/50 transition-all cursor-pointer group">
+        <div className="flex items-center justify-between rounded-md p-2 hover:bg-sidebar-accent/50 transition-colors cursor-pointer group">
           <div className="flex items-center gap-3">
-            <Avatar className="h-9 w-9 border border-sidebar-border/50 shadow-sm group-hover:border-primary/30 transition-colors">
+            <Avatar className="h-8 w-8 border border-sidebar-border/50">
               <AvatarImage
                 src="https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1"
                 alt="User"
@@ -86,15 +87,15 @@ export function AppSidebar() {
               <AvatarFallback>AS</AvatarFallback>
             </Avatar>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-semibold leading-none text-sidebar-foreground truncate group-hover:text-primary transition-colors">
+              <span className="text-sm font-medium leading-none text-sidebar-foreground group-hover:text-primary transition-colors">
                 Arthur Silva
               </span>
-              <span className="text-xs text-sidebar-foreground/50 mt-1.5 font-medium truncate">
+              <span className="text-[11px] text-sidebar-foreground/50 mt-1.5 truncate">
                 Administrador
               </span>
             </div>
           </div>
-          <button className="text-sidebar-foreground/40 hover:text-primary transition-colors p-1.5 rounded-md hover:bg-primary/10">
+          <button className="text-sidebar-foreground/40 hover:text-sidebar-foreground transition-colors p-1 rounded hover:bg-sidebar-accent">
             <LogOut className="h-4 w-4" />
           </button>
         </div>
