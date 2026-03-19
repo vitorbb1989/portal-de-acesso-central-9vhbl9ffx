@@ -16,17 +16,17 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
   const statusConfig = {
     online: {
       color: 'bg-[#10B981]',
-      glow: 'shadow-[0_0_14px_rgba(16,185,129,0.8)]',
+      glow: 'shadow-[0_0_12px_rgba(16,185,129,0.9)]',
       label: 'Online',
     },
     warning: {
       color: 'bg-[#F59E0B]',
-      glow: 'shadow-[0_0_14px_rgba(245,158,11,0.8)]',
-      label: 'Unstable',
+      glow: 'shadow-[0_0_12px_rgba(245,158,11,0.9)]',
+      label: 'Instável',
     },
     offline: {
       color: 'bg-[#EF4444]',
-      glow: 'shadow-[0_0_8px_rgba(239,68,68,0.4)]',
+      glow: 'shadow-[0_0_12px_rgba(239,68,68,0.9)]',
       label: 'Offline',
     },
   }
@@ -46,9 +46,9 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
   return (
     <Card
       className={cn(
-        'group relative overflow-hidden transition-all duration-500 ease-out h-full flex flex-col animate-fade-in cursor-pointer',
-        'bg-gradient-to-b from-card to-secondary/30 border-black/[0.05] shadow-subtle',
-        'hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-[0_12px_32px_-4px_rgba(0,102,255,0.15)]',
+        'group relative overflow-hidden transition-all duration-300 ease-out h-full flex flex-col animate-fade-in cursor-pointer',
+        'bg-gradient-to-b from-card to-secondary/30 border border-black/[0.06] shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)]',
+        'hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-[0_12px_32px_-4px_rgba(0,102,255,0.15)] hover:bg-gradient-to-b hover:from-card hover:to-primary/[0.02]',
       )}
       style={{ animationDelay: `${index * 50}ms` }}
       onClick={handleAccess}
@@ -109,7 +109,7 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <>
-                Access <ExternalLink className="ml-2 h-3.5 w-3.5" />
+                Acessar <ExternalLink className="ml-2 h-3.5 w-3.5" />
               </>
             )}
           </Button>
@@ -120,7 +120,7 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
         <div className="absolute inset-0 bg-background/70 backdrop-blur-md flex items-center justify-center z-30 animate-fade-in">
           <div className="flex flex-col items-center text-primary">
             <Loader2 className="h-8 w-8 animate-spin mb-3 drop-shadow-[0_0_16px_rgba(0,102,255,0.6)]" />
-            <span className="text-sm font-semibold tracking-wide">Initiating session...</span>
+            <span className="text-sm font-semibold tracking-wide">Iniciando sessão...</span>
           </div>
         </div>
       )}

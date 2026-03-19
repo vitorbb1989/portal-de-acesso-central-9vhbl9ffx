@@ -10,7 +10,7 @@ export default function Layout() {
       <SidebarInset className="bg-background min-h-screen flex flex-col relative">
         <AppHeader />
         {/* Brand identity signature */}
-        <div className="h-[2px] w-full bg-gradient-to-r from-primary/80 via-primary/30 to-transparent absolute top-16 left-0 z-30 shadow-[0_1px_12px_rgba(0,102,255,0.4)]" />
+        <div className="h-[1px] w-full bg-gradient-to-r from-primary via-primary/40 to-transparent absolute top-16 left-0 z-30 shadow-[0_0_10px_rgba(0,102,255,0.3)]" />
         <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full pt-6">
           <Outlet />
         </main>

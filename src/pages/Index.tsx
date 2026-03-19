@@ -14,10 +14,10 @@ const Index = () => {
       <section className="flex flex-col gap-5 pb-6 border-b border-border/50 relative">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-            Your workspace is fully operational
+            Seu workspace está totalmente operacional
           </h1>
           <p className="text-muted-foreground text-lg">
-            All systems assigned to your workspace are operating normally.
+            Todos os sistemas atribuídos ao seu workspace estão operando normalmente.
           </p>
         </div>
 
@@ -30,13 +30,13 @@ const Index = () => {
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
-              Plan
+              Plano
             </span>
             <span className="text-sm font-medium text-primary">Professional</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-b from-secondary/50 to-secondary/20 rounded-lg border border-black/[0.04] shadow-sm">
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
-              Active Modules
+              Módulos Ativos
             </span>
             <span className="text-sm font-medium text-foreground">4</span>
           </div>
@@ -52,7 +52,7 @@ const Index = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-success opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-success shadow-[0_0_12px_rgba(16,185,129,0.8)]"></span>
             </div>
-            <span className="text-sm font-medium text-foreground">4 platforms available</span>
+            <span className="text-sm font-medium text-foreground">4 plataformas disponíveis</span>
           </div>
 
           <div className="hidden sm:block w-px h-5 bg-border/80" />
@@ -65,14 +65,14 @@ const Index = () => {
               ></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-warning shadow-[0_0_12px_rgba(245,158,11,0.8)]"></span>
             </div>
-            <span className="text-sm font-medium text-foreground">1 system unstable</span>
+            <span className="text-sm font-medium text-foreground">1 sistema instável</span>
           </div>
 
           <div className="hidden sm:block w-px h-5 bg-border/80" />
 
           <div className="flex items-center gap-3 text-muted-foreground">
             <Clock className="h-4 w-4 text-primary/70" />
-            <span className="text-sm font-medium">Last sync: 2 minutes ago</span>
+            <span className="text-sm font-medium">Última sincronização: há 2 min</span>
           </div>
         </section>
       )}
@@ -80,7 +80,7 @@ const Index = () => {
       <section>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold tracking-tight">
-            {searchQuery ? 'Search Results' : 'Quick Access'}
+            {searchQuery ? 'Resultados da Busca' : 'Acesso Rápido'}
           </h2>
           {!searchQuery && (
             <Button
@@ -89,7 +89,7 @@ const Index = () => {
               className="text-primary hover:text-primary hover:bg-primary/10 transition-colors group"
             >
               <Link to="/platforms">
-                See all{' '}
+                Ver todos{' '}
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
@@ -104,7 +104,9 @@ const Index = () => {
           </div>
         ) : (
           <div className="py-12 text-center bg-secondary/30 rounded-xl border border-dashed border-border">
-            <p className="text-muted-foreground">No platforms found for "{searchQuery}"</p>
+            <p className="text-muted-foreground">
+              Nenhuma plataforma encontrada para "{searchQuery}"
+            </p>
           </div>
         )}
       </section>

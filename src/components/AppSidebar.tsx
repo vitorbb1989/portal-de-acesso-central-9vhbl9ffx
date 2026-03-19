@@ -16,10 +16,10 @@ export function AppSidebar() {
   const location = useLocation()
 
   const navItems = [
-    { title: 'Overview', url: '/', icon: LayoutDashboard },
-    { title: 'Platforms', url: '/platforms', icon: Grid },
-    { title: 'Access Logs', url: '/logs', icon: History },
-    { title: 'Settings', url: '/settings', icon: Settings },
+    { title: 'Visão Geral', url: '/', icon: LayoutDashboard },
+    { title: 'Plataformas', url: '/platforms', icon: Grid },
+    { title: 'Logs de Acesso', url: '/logs', icon: History },
+    { title: 'Configurações', url: '/settings', icon: Settings },
   ]
 
   return (
@@ -31,7 +31,7 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-tight text-sidebar-foreground">
-              Central Portal
+              Portal Central
             </span>
             <span className="text-xs text-sidebar-foreground/60 font-medium">Acme Corp</span>
           </div>
@@ -90,7 +90,7 @@ export function AppSidebar() {
                 Arthur Silva
               </span>
               <span className="text-xs text-sidebar-foreground/50 mt-1.5 font-medium truncate">
-                Administrator
+                Administrador
               </span>
             </div>
           </div>
