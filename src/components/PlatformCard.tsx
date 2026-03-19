@@ -46,16 +46,16 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
   return (
     <Card
       className={cn(
-        'group relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] h-full flex flex-col animate-fade-in cursor-pointer',
+        'group relative overflow-hidden transition-all duration-500 ease-out h-full flex flex-col animate-fade-in cursor-pointer',
         'bg-gradient-to-b from-white to-secondary/30 border border-black/[0.04] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)]',
         'hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-[0_12px_40px_-8px_rgba(0,102,255,0.25),inset_0_1px_0_rgba(255,255,255,1)] hover:bg-gradient-to-b hover:from-white hover:to-primary/[0.02]',
       )}
       style={{ animationDelay: `${index * 50}ms` }}
       onClick={handleAccess}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
       <div
-        className="absolute top-0 left-0 w-full h-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-20 transform scale-x-0 group-hover:scale-x-100"
+        className="absolute top-0 left-0 w-full h-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out z-20 transform scale-x-0 group-hover:scale-x-100"
         style={{
           background: platform.color
             ? `linear-gradient(to right, transparent, ${platform.color}, transparent)`
@@ -65,7 +65,7 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
 
       <CardHeader className="p-6 pb-0 flex flex-row items-start justify-between space-y-0 relative z-10">
         <div
-          className="h-12 w-12 rounded-xl bg-white flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.04)] group-hover:shadow-[0_0_20px_rgba(0,102,255,0.2)] group-hover:scale-[1.03]"
+          className="h-12 w-12 rounded-xl bg-white flex items-center justify-center transition-all duration-500 ease-out border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.04)] group-hover:shadow-[0_0_20px_rgba(0,102,255,0.2)] group-hover:scale-[1.03]"
           style={
             platform.color
               ? { color: platform.color, borderColor: `${platform.color}40` }
@@ -112,7 +112,7 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 px-3 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-primary/10 font-medium"
+            className="h-8 px-3 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out hover:bg-primary/10 font-medium"
             onClick={(e) => {
               e.stopPropagation()
               handleAccess(e)
