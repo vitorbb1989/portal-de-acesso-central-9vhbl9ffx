@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, ExternalLink, Lock } from 'lucide-react'
+import { Loader2, ExternalLink, Lock, Maximize2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { StatusBadge } from './StatusBadge'
 import { PlatformStatus } from '@/lib/mock-data'
@@ -16,6 +17,7 @@ export interface PlatformCardProps {
   accessLevel?: 'full' | 'restricted'
   url?: string
   index?: number
+  openMode?: 'new_tab' | 'internal'
 }
 
 export function PlatformCard({
@@ -28,8 +30,10 @@ export function PlatformCard({
   accessLevel = 'full',
   url,
   index = 0,
+  openMode = 'new_tab',
 }: PlatformCardProps) {
   const [isConnecting, setIsConnecting] = useState(false)
+  const navigate = useNavigate()
 
   const isRestricted = accessLevel === 'restricted'
   const isOffline = status === 'offline'
@@ -56,12 +60,19 @@ export function PlatformCard({
 
   const handleAccess = (e: React.MouseEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     if (isRestricted || isOffline) return
     setIsConnecting(true)
+
+    // Simulate connection latency before acting on routing
     setTimeout(() => {
       setIsConnecting(false)
-      console.log(`Navigating to ${url}`)
-    }, 800)
+      if (openMode === 'internal') {
+        navigate(`/platform/${id}`)
+      } else {
+        if (url) window.open(url, '_blank', 'noopener,noreferrer')
+      }
+    }, 600)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -135,6 +146,7 @@ export function PlatformCard({
                 : 'bg-primary/10 text-primary opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus:opacity-100 group-focus:translate-y-0 hover:bg-primary hover:text-white',
             )}
             onClick={(e) => {
+              // Ensure we don't trigger the card click again
               e.stopPropagation()
               handleAccess(e)
             }}
@@ -149,7 +161,12 @@ export function PlatformCard({
               'Indisponível'
             ) : (
               <>
-                Acessar <ExternalLink className="ml-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
+                Acessar
+                {openMode === 'internal' ? (
+                  <Maximize2 className="ml-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
+                ) : (
+                  <ExternalLink className="ml-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
+                )}
               </>
             )}
           </Button>
@@ -157,7 +174,7 @@ export function PlatformCard({
       </CardContent>
 
       {isConnecting && (
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px] flex items-center justify-center z-30 animate-fade-in">
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px] flex items-center justify-center z-30 animate-fade-in rounded-lg">
           <div className="flex flex-col items-center text-primary">
             <Loader2 className="h-8 w-8 animate-spin mb-3" strokeWidth={3} />
             <span className="text-sm font-bold">Autenticando...</span>

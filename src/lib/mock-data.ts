@@ -28,6 +28,7 @@ export interface Platform {
   lastAccessed?: string
   url: string
   hasAccess?: boolean
+  openMode?: 'new_tab' | 'internal'
 }
 
 export interface AccessLog {
@@ -73,6 +74,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Há 5 minutos',
     url: 'https://crm.example.com',
     hasAccess: true,
+    openMode: 'internal',
   },
   {
     id: '2',
@@ -85,6 +87,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Há 1 hora',
     url: 'https://cloud.example.com',
     hasAccess: true,
+    openMode: 'internal',
   },
   {
     id: '3',
@@ -97,6 +100,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Há 2 horas',
     url: 'https://ci.example.com',
     hasAccess: true,
+    openMode: 'new_tab',
   },
   {
     id: '4',
@@ -109,6 +113,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Ontem',
     url: 'https://metrics.example.com',
     hasAccess: true,
+    openMode: 'internal',
   },
   {
     id: '5',
@@ -121,6 +126,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Há 10 minutos',
     url: 'https://chat.example.com',
     hasAccess: true,
+    openMode: 'new_tab',
   },
   {
     id: '6',
@@ -132,6 +138,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Há 3 dias',
     url: 'https://vault.example.com',
     hasAccess: true,
+    openMode: 'internal',
   },
   {
     id: '7',
@@ -143,6 +150,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Há 4 horas',
     url: 'https://email.example.com',
     hasAccess: true,
+    openMode: 'new_tab',
   },
   {
     id: '8',
@@ -155,6 +163,7 @@ export const mockPlatforms: Platform[] = [
     lastAccessed: 'Há 1 dia',
     url: 'https://dw.example.com',
     hasAccess: false,
+    openMode: 'internal',
   },
 ]
 

@@ -75,6 +75,7 @@ const AddPlatform = () => {
     color: '#0066FF',
     lastAccessed: 'Nunca',
     hasAccess: true,
+    openMode: 'new_tab',
   })
 
   const handleNext = () => setStep((s) => Math.min(s + 1, 3))
@@ -171,6 +172,23 @@ const AddPlatform = () => {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="openMode">Modo de Abertura</Label>
+                      <Select
+                        value={formData.openMode}
+                        onValueChange={(v: 'new_tab' | 'internal') =>
+                          setFormData({ ...formData, openMode: v })
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="new_tab">Nova Guia</SelectItem>
+                          <SelectItem value="internal">Visualizador Interno</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="desc">Descrição</Label>
@@ -264,8 +282,10 @@ const AddPlatform = () => {
                       <span className="font-medium">{formData.url || 'Não informada'}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Categoria</span>
-                      <span className="font-medium">{formData.category}</span>
+                      <span className="text-muted-foreground">Modo de Abertura</span>
+                      <span className="font-medium">
+                        {formData.openMode === 'internal' ? 'Interno' : 'Nova Guia'}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -315,6 +335,7 @@ const AddPlatform = () => {
                 category={formData.category}
                 accessLevel="full"
                 url={formData.url}
+                openMode={formData.openMode}
                 index={0}
               />
             </div>

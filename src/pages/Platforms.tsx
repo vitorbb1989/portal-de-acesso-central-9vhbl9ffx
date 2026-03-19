@@ -55,6 +55,7 @@ const Platforms = () => {
             category={platform.category}
             accessLevel={platform.hasAccess === false ? 'restricted' : 'full'}
             url={platform.url}
+            openMode={platform.openMode}
             index={index}
           />
         ))}
