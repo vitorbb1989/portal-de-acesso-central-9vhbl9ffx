@@ -13,30 +13,31 @@ const Index = () => {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Welcome & Metadata Section */}
-      <section className="flex flex-col gap-5 pb-6 border-b border-border/60">
+      <section className="flex flex-col gap-5 pb-6 border-b border-primary/5">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-            Seu workspace está pronto
+            Visão Geral do Workspace
           </h1>
           <p className="text-muted-foreground text-lg">
-            Todos os sistemas disponíveis para a sua conta estão operacionais.
+            Todos os sistemas atribuídos ao seu workspace estão operacionais e funcionando como
+            esperado.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary/40 rounded-lg border border-border/50">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/[0.03] rounded-lg border border-primary/10">
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
               Workspace
             </span>
             <span className="text-sm font-medium text-foreground">Acme Corp</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary/40 rounded-lg border border-border/50">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/[0.03] rounded-lg border border-primary/10">
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
               Plano
             </span>
             <span className="text-sm font-medium text-primary">Professional</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary/40 rounded-lg border border-border/50">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/[0.03] rounded-lg border border-primary/10">
             <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
               Módulos Ativos
             </span>
@@ -45,22 +46,22 @@ const Index = () => {
         </div>
       </section>
 
-      {/* System Context Block */}
+      {/* System Health Context Block */}
       {!searchQuery && (
-        <section className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 p-4 rounded-xl border border-border/50 bg-secondary/20 backdrop-blur-sm">
+        <section className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 p-4 rounded-xl border border-primary/10 bg-gradient-to-r from-primary/[0.02] to-transparent backdrop-blur-sm">
           <div className="flex items-center gap-3">
-            <div className="flex h-2 w-2 rounded-full bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse-slow" />
+            <div className="flex h-2.5 w-2.5 rounded-full bg-status-success shadow-[0_0_12px_rgba(16,185,129,0.8)] animate-pulse-slow" />
             <span className="text-sm font-medium text-foreground">4 plataformas disponíveis</span>
           </div>
 
-          <div className="hidden sm:block w-px h-4 bg-border" />
+          <div className="hidden sm:block w-px h-5 bg-border/80" />
 
           <div className="flex items-center gap-3">
-            <div className="flex h-2 w-2 rounded-full bg-status-warning shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+            <div className="flex h-2.5 w-2.5 rounded-full bg-status-warning shadow-[0_0_12px_rgba(245,158,11,0.8)]" />
             <span className="text-sm font-medium text-foreground">1 sistema instável</span>
           </div>
 
-          <div className="hidden sm:block w-px h-4 bg-border" />
+          <div className="hidden sm:block w-px h-5 bg-border/80" />
 
           <div className="flex items-center gap-3 text-muted-foreground">
             <Clock className="h-4 w-4" />
@@ -79,7 +80,7 @@ const Index = () => {
             <Button
               variant="ghost"
               asChild
-              className="text-primary hover:text-primary hover:bg-primary/10"
+              className="text-primary hover:text-primary hover:bg-primary/10 transition-colors"
             >
               <Link to="/platforms">
                 Ver todas <ArrowRight className="ml-2 h-4 w-4" />
@@ -95,7 +96,7 @@ const Index = () => {
             ))}
           </div>
         ) : (
-          <div className="py-12 text-center bg-secondary/30 rounded-xl border border-dashed">
+          <div className="py-12 text-center bg-secondary/30 rounded-xl border border-dashed border-primary/20">
             <p className="text-muted-foreground">
               Nenhuma plataforma encontrada para "{searchQuery}"
             </p>
