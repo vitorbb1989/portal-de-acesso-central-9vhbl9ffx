@@ -8,10 +8,13 @@ import {
   BrandingConfig,
 } from '@/lib/mock-data'
 
+export type NavigationPreference = 'default' | 'always_new_tab' | 'always_internal'
+
 let globalSearchQuery = ''
 let globalPlatforms: Platform[] = []
 let globalLogs: AccessLog[] = []
 let globalBranding: BrandingConfig = { ...mockBranding }
+let globalNavigationPreference: NavigationPreference = 'default'
 let globalIsLoading = true
 let globalError: string | null = null
 let listeners: Array<() => void> = []
@@ -58,6 +61,11 @@ export const useAppStore = () => {
     notifyListeners()
   }, [])
 
+  const setNavigationPreference = useCallback((pref: NavigationPreference) => {
+    globalNavigationPreference = pref
+    notifyListeners()
+  }, [])
+
   const addPlatform = useCallback((platform: Platform) => {
     globalPlatforms = [platform, ...globalPlatforms]
     notifyListeners()
@@ -81,6 +89,8 @@ export const useAppStore = () => {
     allPlatforms: globalPlatforms,
     logs: globalLogs,
     branding: globalBranding,
+    navigationPreference: globalNavigationPreference,
+    setNavigationPreference,
     addPlatform,
     isLoading: globalIsLoading,
     error: globalError,

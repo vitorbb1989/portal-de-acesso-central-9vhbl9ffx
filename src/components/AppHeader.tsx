@@ -1,7 +1,17 @@
-import { Search, Bell, Command } from 'lucide-react'
+import { Search, Bell, Command, Settings as SettingsIcon } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { useAppStore } from '@/stores/main'
 
 export function AppHeader() {
@@ -64,6 +74,37 @@ export function AppHeader() {
             <Bell className="h-4 w-4" strokeWidth={2.5} />
             <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background shadow-[0_0_8px_rgba(0,102,255,0.6)]" />
           </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-9 w-9 rounded-full shrink-0">
+                <Avatar className="h-9 w-9 border border-border shadow-sm">
+                  <AvatarImage
+                    src="https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1"
+                    alt="Usuário"
+                  />
+                  <AvatarFallback>US</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">Arthur Silva</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    arthur.silva@acmecorp.com
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/settings" className="cursor-pointer w-full flex items-center">
+                  <SettingsIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <span>Configurações</span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

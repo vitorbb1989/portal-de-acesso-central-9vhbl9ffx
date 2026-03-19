@@ -1,11 +1,15 @@
+import { useAppStore, NavigationPreference } from '@/stores/main'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 const Settings = () => {
+  const { navigationPreference, setNavigationPreference } = useAppStore()
+
   return (
     <div className="space-y-6 animate-fade-in max-w-4xl">
       <div>
@@ -66,14 +70,39 @@ const Settings = () => {
 
             <Separator />
 
-            <div className="flex items-center justify-between">
+            <div className="space-y-3">
               <div className="space-y-0.5">
-                <Label className="text-base font-semibold">Abertura de Links</Label>
+                <Label className="text-base font-semibold">
+                  Preferência de Abertura de Plataformas
+                </Label>
                 <p className="text-sm text-muted-foreground">
-                  Abrir plataformas em uma nova aba automaticamente.
+                  Defina o comportamento global ao clicar nos cards de sistemas.
                 </p>
               </div>
-              <Switch defaultChecked />
+              <RadioGroup
+                value={navigationPreference}
+                onValueChange={(v) => setNavigationPreference(v as NavigationPreference)}
+                className="flex flex-col space-y-2 mt-4"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="default" id="pref-default" />
+                  <Label htmlFor="pref-default" className="font-normal">
+                    Padrão do Sistema <span className="text-muted-foreground">(recomendado)</span>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="always_new_tab" id="pref-new-tab" />
+                  <Label htmlFor="pref-new-tab" className="font-normal">
+                    Sempre em Nova Guia
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="always_internal" id="pref-internal" />
+                  <Label htmlFor="pref-internal" className="font-normal">
+                    Sempre no Visualizador Interno
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
           </CardContent>
         </Card>

@@ -6,6 +6,7 @@ import { Loader2, ExternalLink, Lock, Maximize2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { StatusBadge } from './StatusBadge'
 import { PlatformStatus } from '@/lib/mock-data'
+import { useAppStore } from '@/stores/main'
 
 export interface PlatformCardProps {
   id: string
@@ -20,6 +21,15 @@ export interface PlatformCardProps {
   openMode?: 'new_tab' | 'internal'
 }
 
+const CAT_COLORS: Record<string, string> = {
+  CRM: 'bg-violet-100 text-violet-700 group-hover:bg-violet-200 group-focus:bg-violet-200',
+  Infra: 'bg-blue-100 text-blue-700 group-hover:bg-blue-200 group-focus:bg-blue-200',
+  DevTools: 'bg-amber-100 text-amber-700 group-hover:bg-amber-200 group-focus:bg-amber-200',
+  Marketing:
+    'bg-emerald-100 text-emerald-700 group-hover:bg-emerald-200 group-focus:bg-emerald-200',
+  Comunicação: 'bg-rose-100 text-rose-700 group-hover:bg-rose-200 group-focus:bg-rose-200',
+}
+
 export function PlatformCard({
   id,
   title,
@@ -32,30 +42,28 @@ export function PlatformCard({
   index = 0,
   openMode = 'new_tab',
 }: PlatformCardProps) {
+  const { navigationPreference } = useAppStore()
   const [isConnecting, setIsConnecting] = useState(false)
   const navigate = useNavigate()
 
   const isRestricted = accessLevel === 'restricted'
   const isOffline = status === 'offline'
 
+  const effectiveOpenMode =
+    navigationPreference === 'always_new_tab'
+      ? 'new_tab'
+      : navigationPreference === 'always_internal'
+        ? 'internal'
+        : openMode
+
   const getCategoryColor = (cat: string) => {
     if (isRestricted || isOffline) {
       return 'bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-focus:bg-slate-200'
     }
-    switch (cat) {
-      case 'CRM':
-        return 'bg-violet-100 text-violet-700 group-hover:bg-violet-200 group-focus:bg-violet-200'
-      case 'Infra':
-        return 'bg-blue-100 text-blue-700 group-hover:bg-blue-200 group-focus:bg-blue-200'
-      case 'DevTools':
-        return 'bg-amber-100 text-amber-700 group-hover:bg-amber-200 group-focus:bg-amber-200'
-      case 'Marketing':
-        return 'bg-emerald-100 text-emerald-700 group-hover:bg-emerald-200 group-focus:bg-emerald-200'
-      case 'Comunicação':
-        return 'bg-rose-100 text-rose-700 group-hover:bg-rose-200 group-focus:bg-rose-200'
-      default:
-        return 'bg-slate-100 text-slate-700 group-hover:bg-slate-200 group-focus:bg-slate-200'
-    }
+    return (
+      CAT_COLORS[cat] ||
+      'bg-slate-100 text-slate-700 group-hover:bg-slate-200 group-focus:bg-slate-200'
+    )
   }
 
   const handleAccess = (e: React.MouseEvent) => {
@@ -64,10 +72,9 @@ export function PlatformCard({
     if (isRestricted || isOffline) return
     setIsConnecting(true)
 
-    // Simulate connection latency before acting on routing
     setTimeout(() => {
       setIsConnecting(false)
-      if (openMode === 'internal') {
+      if (effectiveOpenMode === 'internal') {
         navigate(`/platform/${id}`)
       } else {
         if (url) window.open(url, '_blank', 'noopener,noreferrer')
@@ -146,7 +153,6 @@ export function PlatformCard({
                 : 'bg-primary/10 text-primary opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus:opacity-100 group-focus:translate-y-0 hover:bg-primary hover:text-white',
             )}
             onClick={(e) => {
-              // Ensure we don't trigger the card click again
               e.stopPropagation()
               handleAccess(e)
             }}
@@ -162,7 +168,7 @@ export function PlatformCard({
             ) : (
               <>
                 Acessar
-                {openMode === 'internal' ? (
+                {effectiveOpenMode === 'internal' ? (
                   <Maximize2 className="ml-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
                 ) : (
                   <ExternalLink className="ml-1.5 h-3.5 w-3.5" strokeWidth={2.5} />
