@@ -8,12 +8,15 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuSkeleton,
 } from '@/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
+import { useAppStore } from '@/stores/main'
 
 export function AppSidebar() {
   const location = useLocation()
+  const { isLoading } = useAppStore()
 
   const navItems = [
     { title: 'Visão Geral', url: '/', icon: LayoutDashboard },
@@ -42,39 +45,45 @@ export function AppSidebar() {
 
       <SidebarContent className="px-4 pt-6">
         <SidebarMenu>
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.url
-            return (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={isActive}
-                  tooltip={item.title}
-                  className={cn(
-                    'h-10 transition-all duration-200 rounded-md mb-1 relative group/menu-btn',
-                    isActive
-                      ? 'bg-primary/15 text-white font-medium before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-2/3 before:w-[3px] before:bg-primary before:rounded-r-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]'
-                      : 'text-sidebar-foreground/70 hover:text-white hover:bg-sidebar-accent',
-                  )}
-                >
-                  <Link to={item.url} className="flex items-center gap-3 px-2 w-full">
-                    <item.icon
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <SidebarMenuItem key={i}>
+                  <SidebarMenuSkeleton showIcon className="h-10 mb-1 rounded-md" />
+                </SidebarMenuItem>
+              ))
+            : navItems.map((item) => {
+                const isActive = location.pathname === item.url
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.title}
                       className={cn(
-                        'h-[18px] w-[18px] transition-colors',
+                        'h-10 transition-all duration-200 rounded-md mb-1 relative group/menu-btn',
                         isActive
-                          ? 'text-primary'
-                          : 'text-sidebar-foreground/50 group-hover/menu-btn:text-sidebar-foreground',
+                          ? 'bg-primary/15 text-white font-medium before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-2/3 before:w-[3px] before:bg-primary before:rounded-r-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]'
+                          : 'text-sidebar-foreground/70 hover:text-white hover:bg-sidebar-accent',
                       )}
-                      strokeWidth={isActive ? 2.5 : 2}
-                    />
-                    <span className={cn('text-sm', isActive ? 'font-semibold' : 'font-medium')}>
-                      {item.title}
-                    </span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            )
-          })}
+                    >
+                      <Link to={item.url} className="flex items-center gap-3 px-2 w-full">
+                        <item.icon
+                          className={cn(
+                            'h-[18px] w-[18px] transition-colors',
+                            isActive
+                              ? 'text-primary'
+                              : 'text-sidebar-foreground/50 group-hover/menu-btn:text-sidebar-foreground',
+                          )}
+                          strokeWidth={isActive ? 2.5 : 2}
+                        />
+                        <span className={cn('text-sm', isActive ? 'font-semibold' : 'font-medium')}>
+                          {item.title}
+                        </span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
         </SidebarMenu>
       </SidebarContent>
 

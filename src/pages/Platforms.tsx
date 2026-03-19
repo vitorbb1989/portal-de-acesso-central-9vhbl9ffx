@@ -1,16 +1,66 @@
 import { useState } from 'react'
 import { useAppStore } from '@/stores/main'
 import { PlatformCard } from '@/components/PlatformCard'
+import { PlatformCardSkeleton } from '@/components/PlatformCardSkeleton'
+import { EmptyState } from '@/components/EmptyState'
+import { ErrorState } from '@/components/ErrorState'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const Platforms = () => {
-  const { platforms } = useAppStore()
+  const { platforms, isLoading, error, retryFetch } = useAppStore()
   const [activeTab, setActiveTab] = useState<string>('all')
 
   const categories = Array.from(new Set(platforms.map((p) => p.category)))
 
   const filteredPlatforms =
     activeTab === 'all' ? platforms : platforms.filter((p) => p.category === activeTab)
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+          {Array.from({ length: 8 }).map((_, idx) => (
+            <PlatformCardSkeleton key={idx} index={idx} />
+          ))}
+        </div>
+      )
+    }
+
+    if (error) {
+      return (
+        <div className="mt-6">
+          <ErrorState error={error} onRetry={retryFetch} />
+        </div>
+      )
+    }
+
+    if (filteredPlatforms.length === 0) {
+      return (
+        <div className="mt-6">
+          <EmptyState message="Nenhuma plataforma encontrada nesta visualização." />
+        </div>
+      )
+    }
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+        {filteredPlatforms.map((platform, index) => (
+          <PlatformCard
+            key={platform.id}
+            id={platform.id}
+            title={platform.name}
+            description={platform.description}
+            icon={platform.icon}
+            status={platform.status}
+            category={platform.category}
+            accessLevel={platform.hasAccess === false ? 'restricted' : 'full'}
+            url={platform.url}
+            index={index}
+          />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -47,23 +97,12 @@ const Platforms = () => {
           </TabsList>
         </Tabs>
         <span className="text-xs text-foreground font-bold bg-card px-3 py-1.5 rounded-md border border-border shadow-sm">
-          {filteredPlatforms.length} {filteredPlatforms.length === 1 ? 'item' : 'itens'}
+          {isLoading ? '-' : filteredPlatforms.length}{' '}
+          {filteredPlatforms.length === 1 ? 'item' : 'itens'}
         </span>
       </div>
 
-      {filteredPlatforms.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredPlatforms.map((platform, index) => (
-            <PlatformCard key={platform.id} platform={platform} index={index} />
-          ))}
-        </div>
-      ) : (
-        <div className="py-16 text-center bg-secondary/30 rounded-xl border border-dashed border-border">
-          <p className="text-sm font-medium text-muted-foreground">
-            Nenhuma plataforma encontrada nesta visualização.
-          </p>
-        </div>
-      )}
+      {renderContent()}
     </div>
   )
 }

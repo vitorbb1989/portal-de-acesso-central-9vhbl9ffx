@@ -27,6 +27,7 @@ export interface Platform {
   color?: string
   lastAccessed?: string
   url: string
+  hasAccess?: boolean
 }
 
 export interface AccessLog {
@@ -35,6 +36,13 @@ export interface AccessLog {
   platform: string
   timestamp: string
   ip: string
+}
+
+export const mockContext = {
+  currentRoute: {
+    path: '/',
+    component: 'Index',
+  },
 }
 
 export const mockPlatforms: Platform[] = [
@@ -48,6 +56,7 @@ export const mockPlatforms: Platform[] = [
     color: '#8B5CF6',
     lastAccessed: 'Há 5 minutos',
     url: 'https://crm.example.com',
+    hasAccess: true,
   },
   {
     id: '2',
@@ -59,6 +68,7 @@ export const mockPlatforms: Platform[] = [
     color: '#0066FF',
     lastAccessed: 'Há 1 hora',
     url: 'https://cloud.example.com',
+    hasAccess: true,
   },
   {
     id: '3',
@@ -70,6 +80,7 @@ export const mockPlatforms: Platform[] = [
     color: '#F59E0B',
     lastAccessed: 'Há 2 horas',
     url: 'https://ci.example.com',
+    hasAccess: true,
   },
   {
     id: '4',
@@ -81,6 +92,7 @@ export const mockPlatforms: Platform[] = [
     color: '#10B981',
     lastAccessed: 'Ontem',
     url: 'https://metrics.example.com',
+    hasAccess: true,
   },
   {
     id: '5',
@@ -92,6 +104,7 @@ export const mockPlatforms: Platform[] = [
     color: '#F43F5E',
     lastAccessed: 'Há 10 minutos',
     url: 'https://chat.example.com',
+    hasAccess: true,
   },
   {
     id: '6',
@@ -102,6 +115,7 @@ export const mockPlatforms: Platform[] = [
     icon: Shield,
     lastAccessed: 'Há 3 dias',
     url: 'https://vault.example.com',
+    hasAccess: true,
   },
   {
     id: '7',
@@ -112,6 +126,7 @@ export const mockPlatforms: Platform[] = [
     icon: Mail,
     lastAccessed: 'Há 4 horas',
     url: 'https://email.example.com',
+    hasAccess: true,
   },
   {
     id: '8',
@@ -123,6 +138,7 @@ export const mockPlatforms: Platform[] = [
     color: '#0066FF',
     lastAccessed: 'Há 1 dia',
     url: 'https://dw.example.com',
+    hasAccess: false,
   },
 ]
 

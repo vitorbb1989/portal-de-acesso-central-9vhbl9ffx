@@ -1,13 +1,63 @@
 import { useAppStore } from '@/stores/main'
 import { PlatformCard } from '@/components/PlatformCard'
+import { PlatformCardSkeleton } from '@/components/PlatformCardSkeleton'
+import { EmptyState } from '@/components/EmptyState'
+import { ErrorState } from '@/components/ErrorState'
 import { ArrowRight, Clock, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 
 const Index = () => {
-  const { platforms, searchQuery } = useAppStore()
+  const { platforms, searchQuery, isLoading, error, retryFetch } = useAppStore()
 
   const displayedPlatforms = searchQuery ? platforms : platforms.slice(0, 4)
+
+  const renderGrid = () => {
+    if (isLoading) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <PlatformCardSkeleton key={idx} index={idx} />
+          ))}
+        </div>
+      )
+    }
+
+    if (error) {
+      return <ErrorState error={error} onRetry={retryFetch} />
+    }
+
+    if (displayedPlatforms.length === 0) {
+      return (
+        <EmptyState
+          message={
+            searchQuery
+              ? `Nenhum resultado para "${searchQuery}"`
+              : 'Nenhum módulo atribuído ao seu tenant.'
+          }
+        />
+      )
+    }
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {displayedPlatforms.map((platform, index) => (
+          <PlatformCard
+            key={platform.id}
+            id={platform.id}
+            title={platform.name}
+            description={platform.description}
+            icon={platform.icon}
+            status={platform.status}
+            category={platform.category}
+            accessLevel={platform.hasAccess === false ? 'restricted' : 'full'}
+            url={platform.url}
+            index={index}
+          />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -50,7 +100,7 @@ const Index = () => {
         </Button>
       </section>
 
-      {!searchQuery && (
+      {!searchQuery && !isLoading && !error && platforms.length > 0 && (
         <section className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 px-5 py-4 rounded-xl border border-border bg-card shadow-sm relative overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-status-success" />
 
@@ -89,7 +139,7 @@ const Index = () => {
           <h2 className="text-lg font-bold tracking-tight">
             {searchQuery ? 'Resultados da Busca' : 'Acesso Rápido'}
           </h2>
-          {!searchQuery && (
+          {!searchQuery && !isLoading && !error && platforms.length > 0 && (
             <Button
               variant="ghost"
               asChild
@@ -106,19 +156,7 @@ const Index = () => {
           )}
         </div>
 
-        {displayedPlatforms.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {displayedPlatforms.map((platform, index) => (
-              <PlatformCard key={platform.id} platform={platform} index={index} />
-            ))}
-          </div>
-        ) : (
-          <div className="py-12 text-center bg-secondary/30 rounded-xl border border-dashed border-border">
-            <p className="text-sm font-medium text-muted-foreground">
-              Nenhum resultado para "{searchQuery}"
-            </p>
-          </div>
-        )}
+        {renderGrid()}
       </section>
     </div>
   )

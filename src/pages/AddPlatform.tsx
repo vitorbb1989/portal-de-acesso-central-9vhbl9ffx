@@ -74,6 +74,7 @@ const AddPlatform = () => {
     icon: Globe,
     color: '#0066FF',
     lastAccessed: 'Nunca',
+    hasAccess: true,
   })
 
   const handleNext = () => setStep((s) => Math.min(s + 1, 3))
@@ -305,7 +306,17 @@ const AddPlatform = () => {
               <Box className="w-4 h-4 mr-2" /> Preview em Tempo Real
             </h3>
             <div className="pointer-events-none w-full shadow-elevation rounded-xl">
-              <PlatformCard platform={formData} index={0} />
+              <PlatformCard
+                id={formData.id}
+                title={formData.name}
+                description={formData.description}
+                icon={formData.icon}
+                status={formData.status}
+                category={formData.category}
+                accessLevel="full"
+                url={formData.url}
+                index={0}
+              />
             </div>
 
             <p className="text-xs text-muted-foreground mt-6 bg-secondary/30 p-3 rounded-lg border border-dashed border-border/60">

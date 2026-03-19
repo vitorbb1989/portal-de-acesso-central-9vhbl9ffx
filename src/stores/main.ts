@@ -2,12 +2,35 @@ import { useState, useCallback, useEffect } from 'react'
 import { mockPlatforms, mockLogs, Platform, AccessLog } from '@/lib/mock-data'
 
 let globalSearchQuery = ''
-let globalPlatforms = [...mockPlatforms]
-let globalLogs = [...mockLogs]
+let globalPlatforms: Platform[] = []
+let globalLogs: AccessLog[] = []
+let globalIsLoading = true
+let globalError: string | null = null
 let listeners: Array<() => void> = []
+
+let initialized = false
 
 function notifyListeners() {
   listeners.forEach((listener) => listener())
+}
+
+function initData() {
+  globalIsLoading = true
+  globalError = null
+  notifyListeners()
+
+  setTimeout(() => {
+    // Simulating API integration loading delay
+    globalPlatforms = [...mockPlatforms]
+    globalLogs = [...mockLogs]
+    globalIsLoading = false
+    notifyListeners()
+  }, 1000)
+}
+
+if (!initialized) {
+  initialized = true
+  initData()
 }
 
 export const useAppStore = () => {
@@ -31,6 +54,10 @@ export const useAppStore = () => {
     notifyListeners()
   }, [])
 
+  const retryFetch = useCallback(() => {
+    initData()
+  }, [])
+
   const filteredPlatforms = globalPlatforms.filter(
     (p) =>
       p.name.toLowerCase().includes(globalSearchQuery.toLowerCase()) ||
@@ -45,5 +72,8 @@ export const useAppStore = () => {
     allPlatforms: globalPlatforms,
     logs: globalLogs,
     addPlatform,
+    isLoading: globalIsLoading,
+    error: globalError,
+    retryFetch,
   }
 }
