@@ -23,17 +23,17 @@ export function AppSidebar() {
   ]
 
   return (
-    <Sidebar variant="sidebar" className="border-r-0 border-sidebar-border">
+    <Sidebar variant="sidebar" className="border-r-0 border-sidebar-border bg-sidebar">
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-3 px-2 py-1">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-[0_0_15px_rgba(0,102,255,0.3)]">
             <Command className="h-5 w-5" />
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold tracking-tight text-sidebar-foreground">
               Portal Central
             </span>
-            <span className="text-xs text-sidebar-foreground/60">Workspace Acme Corp</span>
+            <span className="text-xs text-sidebar-foreground/70">Workspace Acme Corp</span>
           </div>
         </div>
       </SidebarHeader>
@@ -49,14 +49,21 @@ export function AppSidebar() {
                   isActive={isActive}
                   tooltip={item.title}
                   className={cn(
-                    'h-10 transition-all rounded-md mb-1',
+                    'h-10 transition-all rounded-md mb-1 relative overflow-hidden group/menu-btn',
                     isActive
-                      ? 'bg-sidebar-accent text-primary relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-2/3 before:w-1 before:bg-primary before:rounded-r-full'
-                      : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50',
+                      ? 'bg-primary/10 text-primary shadow-[0_0_15px_rgba(0,102,255,0.05)] before:absolute before:left-0 before:top-0 before:h-full before:w-[3px] before:bg-primary before:rounded-r-full'
+                      : 'text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent/50',
                   )}
                 >
                   <Link to={item.url} className="flex items-center gap-3">
-                    <item.icon className={cn('h-4 w-4', isActive ? 'text-primary' : '')} />
+                    <item.icon
+                      className={cn(
+                        'h-4 w-4 transition-colors',
+                        isActive
+                          ? 'text-primary drop-shadow-[0_0_8px_rgba(0,102,255,0.4)]'
+                          : 'text-sidebar-foreground/60 group-hover/menu-btn:text-sidebar-foreground',
+                      )}
+                    />
                     <span className="font-medium">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
@@ -67,7 +74,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-4">
-        <div className="flex items-center justify-between rounded-lg bg-sidebar-accent/50 p-2 border border-sidebar-border/50">
+        <div className="flex items-center justify-between rounded-lg bg-sidebar-accent/30 p-2 border border-sidebar-border/50 hover:bg-sidebar-accent/50 transition-colors">
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8 border border-sidebar-border">
               <AvatarImage
@@ -80,7 +87,7 @@ export function AppSidebar() {
               <span className="text-sm font-medium leading-none text-sidebar-foreground truncate">
                 Arthur Silva
               </span>
-              <span className="text-xs text-sidebar-foreground/60 mt-1 truncate">Admin</span>
+              <span className="text-xs text-sidebar-foreground/70 mt-1 truncate">Admin</span>
             </div>
           </div>
           <button className="text-sidebar-foreground/50 hover:text-destructive transition-colors p-1">

@@ -14,9 +14,21 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
   const [isConnecting, setIsConnecting] = useState(false)
 
   const statusConfig = {
-    online: { color: 'bg-status-success', label: 'Online' },
-    warning: { color: 'bg-status-warning', label: 'Instável' },
-    offline: { color: 'bg-status-error', label: 'Offline' },
+    online: {
+      color: 'bg-status-success',
+      glow: 'shadow-[0_0_8px_rgba(16,185,129,0.6)]',
+      label: 'Online',
+    },
+    warning: {
+      color: 'bg-status-warning',
+      glow: 'shadow-[0_0_8px_rgba(245,158,11,0.6)]',
+      label: 'Instável',
+    },
+    offline: {
+      color: 'bg-status-error',
+      glow: '',
+      label: 'Offline',
+    },
   }
 
   const currentStatus = statusConfig[platform.status]
@@ -36,28 +48,31 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
   return (
     <Card
       className={cn(
-        'group relative overflow-hidden transition-all duration-300 ease-out hover:shadow-elevation hover:-translate-y-1 hover:border-primary/50 cursor-pointer h-full flex flex-col animate-fade-in',
+        'group relative overflow-hidden transition-all duration-300 ease-out h-full flex flex-col animate-fade-in cursor-pointer',
+        'bg-gradient-to-br from-card to-secondary/30',
+        'hover:shadow-elevation hover:-translate-y-1 hover:border-primary',
       )}
       style={{ animationDelay: `${index * 50}ms` }}
       onClick={handleAccess}
     >
-      <CardHeader className="p-5 pb-0 flex flex-row items-start justify-between space-y-0">
-        <div className="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
-          <Icon className="h-5 w-5" />
+      <CardHeader className="p-5 pb-0 flex flex-row items-start justify-between space-y-0 relative z-10">
+        <div className="h-10 w-10 rounded-lg bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors border border-primary/10 group-hover:border-primary/20">
+          <Icon className="h-5 w-5 drop-shadow-sm" />
         </div>
-        <div className="flex items-center space-x-1.5 bg-secondary/50 px-2 py-1 rounded-full border border-border/50">
+        <div className="flex items-center space-x-1.5 bg-background/80 px-2.5 py-1 rounded-full border border-border/60 shadow-sm backdrop-blur-sm">
           <span
             className={cn(
               'h-2 w-2 rounded-full',
               currentStatus.color,
+              currentStatus.glow,
               platform.status === 'online' && 'animate-pulse-slow',
             )}
           />
-          <span className="text-xs font-medium text-muted-foreground">{currentStatus.label}</span>
+          <span className="text-xs font-medium text-foreground">{currentStatus.label}</span>
         </div>
       </CardHeader>
 
-      <CardContent className="p-5 pt-4 flex-grow flex flex-col">
+      <CardContent className="p-5 pt-4 flex-grow flex flex-col relative z-10">
         <h3 className="font-semibold text-lg tracking-tight mb-1 group-hover:text-primary transition-colors">
           {platform.name}
         </h3>
@@ -66,7 +81,7 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
         </p>
 
         {/* Fake sparkline for visual flair */}
-        <div className="flex items-end gap-1 h-6 mb-4 opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">
+        <div className="flex items-end gap-1 h-6 mb-4 opacity-30 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">
           {[40, 70, 45, 90, 65, 80, 100].map((h, i) => (
             <div
               key={i}
@@ -83,8 +98,10 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
           ))}
         </div>
 
-        <div className="pt-2 border-t flex items-center justify-between mt-auto">
-          <span className="text-xs text-muted-foreground font-medium">{platform.category}</span>
+        <div className="pt-3 border-t border-border/60 flex items-center justify-between mt-auto">
+          <span className="text-xs text-muted-foreground font-medium bg-secondary/60 px-2 py-1 rounded-md">
+            {platform.category}
+          </span>
           <Button
             variant="ghost"
             size="sm"
@@ -108,9 +125,9 @@ export function PlatformCard({ platform, index = 0 }: PlatformCardProps) {
 
       {/* Connection Overlay */}
       {isConnecting && (
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-10 animate-fade-in">
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center z-20 animate-fade-in">
           <div className="flex flex-col items-center text-primary">
-            <Loader2 className="h-8 w-8 animate-spin mb-2" />
+            <Loader2 className="h-8 w-8 animate-spin mb-2 drop-shadow-[0_0_8px_rgba(0,102,255,0.5)]" />
             <span className="text-sm font-medium">Conectando...</span>
           </div>
         </div>

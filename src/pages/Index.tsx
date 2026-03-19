@@ -1,6 +1,6 @@
 import { useAppStore } from '@/stores/main'
 import { PlatformCard } from '@/components/PlatformCard'
-import { Activity, ArrowRight } from 'lucide-react'
+import { ArrowRight, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 
@@ -12,30 +12,62 @@ const Index = () => {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Welcome Section */}
-      <section className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-border/50">
+      {/* Welcome & Metadata Section */}
+      <section className="flex flex-col gap-5 pb-6 border-b border-border/60">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-            Bom dia, Arthur
+            Seu workspace está pronto
           </h1>
-          <p className="text-muted-foreground">
-            Acesse rapidamente as ferramentas essenciais do seu dia a dia.
+          <p className="text-muted-foreground text-lg">
+            Todos os sistemas disponíveis para a sua conta estão operacionais.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 bg-white p-3 rounded-xl border shadow-subtle">
-          <div className="h-10 w-10 rounded-full bg-status-success/10 flex items-center justify-center">
-            <Activity className="h-5 w-5 text-status-success" />
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary/40 rounded-lg border border-border/50">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+              Workspace
+            </span>
+            <span className="text-sm font-medium text-foreground">Acme Corp</span>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-foreground">Sistemas Operacionais</p>
-            <p className="text-xs text-status-success font-medium flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-status-success inline-block animate-pulse-slow" />
-              Status Normal
-            </p>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary/40 rounded-lg border border-border/50">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+              Plano
+            </span>
+            <span className="text-sm font-medium text-primary">Professional</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary/40 rounded-lg border border-border/50">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+              Módulos Ativos
+            </span>
+            <span className="text-sm font-medium text-foreground">4</span>
           </div>
         </div>
       </section>
+
+      {/* System Context Block */}
+      {!searchQuery && (
+        <section className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 p-4 rounded-xl border border-border/50 bg-secondary/20 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-2 w-2 rounded-full bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse-slow" />
+            <span className="text-sm font-medium text-foreground">4 plataformas disponíveis</span>
+          </div>
+
+          <div className="hidden sm:block w-px h-4 bg-border" />
+
+          <div className="flex items-center gap-3">
+            <div className="flex h-2 w-2 rounded-full bg-status-warning shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+            <span className="text-sm font-medium text-foreground">1 sistema instável</span>
+          </div>
+
+          <div className="hidden sm:block w-px h-4 bg-border" />
+
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Clock className="h-4 w-4" />
+            <span className="text-sm font-medium">Última sincronização: há 2 minutos</span>
+          </div>
+        </section>
+      )}
 
       {/* Grid Section */}
       <section>
@@ -57,7 +89,7 @@ const Index = () => {
         </div>
 
         {displayedPlatforms.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
             {displayedPlatforms.map((platform, index) => (
               <PlatformCard key={platform.id} platform={platform} index={index} />
             ))}
