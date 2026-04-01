@@ -16,7 +16,14 @@ import { useAppStore } from '@/stores/main'
 
 export function AppSidebar() {
   const location = useLocation()
-  const { isLoading, branding } = useAppStore()
+  const { isLoading, branding, user, signOut } = useAppStore()
+
+  const initials = user?.name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('')
 
   const navItems = [
     { title: 'Visão Geral', url: '/', icon: LayoutDashboard },
@@ -112,22 +119,22 @@ export function AppSidebar() {
         <div className="flex items-center justify-between rounded-lg p-2.5 hover:bg-sidebar-accent transition-colors cursor-pointer group border border-transparent hover:border-sidebar-border/50">
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9 border border-sidebar-border">
-              <AvatarImage
-                src="https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1"
-                alt="User"
-              />
-              <AvatarFallback>AS</AvatarFallback>
+              <AvatarImage alt={user?.name || 'Usuário'} />
+              <AvatarFallback>{initials || 'US'}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col overflow-hidden">
               <span className="text-sm font-bold leading-none text-sidebar-foreground group-hover:text-white transition-colors">
-                Arthur Silva
+                {user?.name || 'Usuário'}
               </span>
               <span className="text-[11px] font-medium text-sidebar-foreground/60 mt-1.5 truncate">
-                Administrador
+                {user?.role === 'ADMIN' ? 'Administrador' : 'Usuário'}
               </span>
             </div>
           </div>
-          <button className="text-sidebar-foreground/40 hover:text-white transition-colors p-1.5 rounded hover:bg-sidebar-background">
+          <button
+            className="text-sidebar-foreground/40 hover:text-white transition-colors p-1.5 rounded hover:bg-sidebar-background"
+            onClick={signOut}
+          >
             <LogOut className="h-4 w-4" strokeWidth={2.5} />
           </button>
         </div>

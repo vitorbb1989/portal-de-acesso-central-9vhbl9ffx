@@ -16,7 +16,14 @@ import { useAppStore } from '@/stores/main'
 
 export function AppHeader() {
   const { isMobile } = useSidebar()
-  const { searchQuery, setSearchQuery, branding } = useAppStore()
+  const { searchQuery, setSearchQuery, branding, user, signOut } = useAppStore()
+
+  const initials = user?.name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('')
 
   return (
     <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border px-4 sm:px-6">
@@ -79,21 +86,16 @@ export function AppHeader() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full shrink-0">
                 <Avatar className="h-9 w-9 border border-border shadow-sm">
-                  <AvatarImage
-                    src="https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1"
-                    alt="Usuário"
-                  />
-                  <AvatarFallback>US</AvatarFallback>
+                  <AvatarImage alt={user?.name || 'Usuário'} />
+                  <AvatarFallback>{initials || 'US'}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Arthur Silva</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    arthur.silva@acmecorp.com
-                  </p>
+                  <p className="text-sm font-medium leading-none">{user?.name || 'Usuário'}</p>
+                  <p className="text-xs leading-none text-muted-foreground">{user?.email || '-'}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -102,6 +104,9 @@ export function AppHeader() {
                   <SettingsIcon className="mr-2 h-4 w-4 text-muted-foreground" />
                   <span>Configurações</span>
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={signOut} className="cursor-pointer">
+                <span>Sair</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

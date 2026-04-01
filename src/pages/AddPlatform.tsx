@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/stores/main'
-import { Platform, PlatformStatus } from '@/lib/mock-data'
+import {
+  type PlatformStatus,
+  type PlatformOpenMode,
+  PLATFORM_ICON_OPTIONS,
+  resolvePlatformIcon,
+} from '@/lib/platforms'
 import { PlatformCard } from '@/components/PlatformCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,37 +21,9 @@ import {
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  Box,
-  Globe,
-  Shield,
-  Database,
-  Cloud,
-  Terminal,
-  Activity,
-  Users,
-  Mail,
-  MessageSquare,
-  LayoutDashboard,
-} from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Box } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-const ICONS = [
-  { name: 'Box', icon: Box },
-  { name: 'Globe', icon: Globe },
-  { name: 'Shield', icon: Shield },
-  { name: 'Database', icon: Database },
-  { name: 'Cloud', icon: Cloud },
-  { name: 'Terminal', icon: Terminal },
-  { name: 'Activity', icon: Activity },
-  { name: 'Users', icon: Users },
-  { name: 'Mail', icon: Mail },
-  { name: 'Message', icon: MessageSquare },
-  { name: 'Dashboard', icon: LayoutDashboard },
-]
+import { ErrorState } from '@/components/ErrorState'
 
 const THEME_COLORS = [
   { name: 'Tech Blue', value: '#0066FF' },
@@ -58,37 +35,85 @@ const THEME_COLORS = [
 
 const CATEGORIES = ['Marketing', 'DevTools', 'CRM', 'Infra', 'Comunicação']
 
+type DraftPlatform = {
+  name: string
+  url: string
+  description: string
+  category: string
+  status: PlatformStatus
+  iconName: string
+  color: string
+  hasAccess: boolean
+  openMode: Exclude<PlatformOpenMode, 'default'>
+}
+
 const AddPlatform = () => {
   const navigate = useNavigate()
-  const { addPlatform } = useAppStore()
+  const { addPlatform, user } = useAppStore()
   const { toast } = useToast()
   const [step, setStep] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [formData, setFormData] = useState<Platform>({
-    id: crypto.randomUUID(),
+  const [formData, setFormData] = useState<DraftPlatform>({
     name: '',
     url: '',
     description: '',
     category: 'Infra',
     status: 'online',
-    icon: Globe,
+    iconName: 'Globe',
     color: '#0066FF',
-    lastAccessed: 'Nunca',
     hasAccess: true,
     openMode: 'new_tab',
   })
 
-  const handleNext = () => setStep((s) => Math.min(s + 1, 3))
-  const handlePrev = () => setStep((s) => Math.max(s - 1, 1))
-
-  const handleComplete = () => {
-    addPlatform(formData)
-    toast({
-      title: 'Plataforma adicionada',
-      description: `${formData.name || 'Nova plataforma'} foi integrada ao workspace.`,
-    })
-    navigate('/')
+  if (user?.role !== 'ADMIN') {
+    return (
+      <div className="pt-8">
+        <ErrorState
+          error="Somente administradores podem cadastrar novas plataformas."
+          onRetry={() => navigate('/')}
+        />
+      </div>
+    )
   }
+
+  const handleNext = () => setStep((current) => Math.min(current + 1, 3))
+  const handlePrev = () => setStep((current) => Math.max(current - 1, 1))
+
+  const handleComplete = async () => {
+    setIsSubmitting(true)
+
+    try {
+      await addPlatform({
+        name: formData.name,
+        url: formData.url,
+        description: formData.description,
+        category: formData.category,
+        status: formData.status,
+        icon: formData.iconName,
+        color: formData.color,
+        hasAccess: formData.hasAccess,
+        openMode: formData.openMode,
+      })
+
+      toast({
+        title: 'Plataforma adicionada',
+        description: `${formData.name || 'Nova plataforma'} foi integrada ao workspace.`,
+      })
+      navigate('/')
+    } catch (error) {
+      toast({
+        title: 'Falha ao adicionar plataforma',
+        description:
+          error instanceof Error ? error.message : 'Não foi possível cadastrar a plataforma.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const previewIcon = resolvePlatformIcon(formData.iconName)
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-fade-in relative pb-12">
@@ -102,25 +127,25 @@ const AddPlatform = () => {
       </div>
 
       <div className="flex items-center space-x-2">
-        {[1, 2, 3].map((s) => (
-          <div key={s} className="flex items-center">
+        {[1, 2, 3].map((currentStep) => (
+          <div key={currentStep} className="flex items-center">
             <div
               className={cn(
                 'flex items-center justify-center w-8 h-8 rounded-full border text-sm font-medium transition-colors duration-300',
-                step === s
+                step === currentStep
                   ? 'border-primary bg-primary text-primary-foreground shadow-[0_0_10px_rgba(0,102,255,0.3)]'
-                  : step > s
+                  : step > currentStep
                     ? 'border-primary bg-primary/10 text-primary'
                     : 'border-border text-muted-foreground bg-secondary/50',
               )}
             >
-              {step > s ? <Check className="w-4 h-4" /> : s}
+              {step > currentStep ? <Check className="w-4 h-4" /> : currentStep}
             </div>
-            {s < 3 && (
+            {currentStep < 3 && (
               <div
                 className={cn(
                   'w-12 h-[2px] mx-2 transition-colors duration-300',
-                  step > s ? 'bg-primary/50' : 'bg-border',
+                  step > currentStep ? 'bg-primary/50' : 'bg-border',
                 )}
               />
             )}
@@ -140,7 +165,7 @@ const AddPlatform = () => {
                     <Input
                       id="name"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(event) => setFormData({ ...formData, name: event.target.value })}
                       placeholder="Ex: Analytics Pro"
                     />
                   </div>
@@ -149,7 +174,7 @@ const AddPlatform = () => {
                     <Input
                       id="url"
                       value={formData.url}
-                      onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                      onChange={(event) => setFormData({ ...formData, url: event.target.value })}
                       placeholder="https://"
                     />
                   </div>
@@ -158,15 +183,15 @@ const AddPlatform = () => {
                       <Label htmlFor="category">Categoria</Label>
                       <Select
                         value={formData.category}
-                        onValueChange={(v) => setFormData({ ...formData, category: v })}
+                        onValueChange={(value) => setFormData({ ...formData, category: value })}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione" />
                         </SelectTrigger>
                         <SelectContent>
-                          {CATEGORIES.map((c) => (
-                            <SelectItem key={c} value={c}>
-                              {c}
+                          {CATEGORIES.map((category) => (
+                            <SelectItem key={category} value={category}>
+                              {category}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -176,8 +201,8 @@ const AddPlatform = () => {
                       <Label htmlFor="openMode">Modo de Abertura</Label>
                       <Select
                         value={formData.openMode}
-                        onValueChange={(v: 'new_tab' | 'internal') =>
-                          setFormData({ ...formData, openMode: v })
+                        onValueChange={(value: DraftPlatform['openMode']) =>
+                          setFormData({ ...formData, openMode: value })
                         }
                       >
                         <SelectTrigger>
@@ -195,13 +220,16 @@ const AddPlatform = () => {
                     <Textarea
                       id="desc"
                       value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      onChange={(event) =>
+                        setFormData({ ...formData, description: event.target.value })
+                      }
                       placeholder="Breve descrição da utilidade..."
                       className="resize-none h-20"
                     />
                   </div>
                 </div>
               )}
+
               {step === 2 && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <h2 className="text-xl font-semibold mb-4">Identidade Visual</h2>
@@ -209,13 +237,14 @@ const AddPlatform = () => {
                   <div className="space-y-3">
                     <Label>Ícone</Label>
                     <div className="grid grid-cols-5 gap-3">
-                      {ICONS.map((ico, idx) => {
-                        const Icon = ico.icon
-                        const isSelected = formData.icon === Icon
+                      {PLATFORM_ICON_OPTIONS.map((iconOption) => {
+                        const Icon = iconOption.icon
+                        const isSelected = formData.iconName === iconOption.name
+
                         return (
                           <button
-                            key={idx}
-                            onClick={() => setFormData({ ...formData, icon: Icon })}
+                            key={iconOption.name}
+                            onClick={() => setFormData({ ...formData, iconName: iconOption.name })}
                             className={cn(
                               'flex items-center justify-center p-3 rounded-xl border transition-all duration-200',
                               isSelected
@@ -233,24 +262,25 @@ const AddPlatform = () => {
                   <div className="space-y-3 pt-2">
                     <Label>Cor de Destaque</Label>
                     <div className="flex gap-4">
-                      {THEME_COLORS.map((c) => (
+                      {THEME_COLORS.map((color) => (
                         <button
-                          key={c.value}
-                          onClick={() => setFormData({ ...formData, color: c.value })}
+                          key={color.value}
+                          onClick={() => setFormData({ ...formData, color: color.value })}
                           className={cn(
                             'w-8 h-8 rounded-full border-2 transition-all duration-200',
-                            formData.color === c.value
+                            formData.color === color.value
                               ? 'scale-110 shadow-[0_0_10px_rgba(0,0,0,0.2)] border-white ring-2 ring-primary/30'
                               : 'border-transparent hover:scale-105 shadow-sm opacity-80 hover:opacity-100',
                           )}
-                          style={{ backgroundColor: c.value }}
-                          title={c.name}
+                          style={{ backgroundColor: color.value }}
+                          title={color.name}
                         />
                       ))}
                     </div>
                   </div>
                 </div>
               )}
+
               {step === 3 && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <h2 className="text-xl font-semibold mb-4">Revisão e Status</h2>
@@ -259,7 +289,9 @@ const AddPlatform = () => {
                     <Label>Status Inicial</Label>
                     <Select
                       value={formData.status}
-                      onValueChange={(v: PlatformStatus) => setFormData({ ...formData, status: v })}
+                      onValueChange={(value: PlatformStatus) =>
+                        setFormData({ ...formData, status: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o status" />
@@ -296,7 +328,7 @@ const AddPlatform = () => {
               <Button
                 variant="outline"
                 onClick={handlePrev}
-                disabled={step === 1}
+                disabled={step === 1 || isSubmitting}
                 className="hover:shadow-sm transition-shadow"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" /> Anterior
@@ -310,10 +342,12 @@ const AddPlatform = () => {
                 </Button>
               ) : (
                 <Button
-                  onClick={handleComplete}
+                  onClick={() => void handleComplete()}
+                  disabled={isSubmitting}
                   className="shadow-[0_4px_14px_0_rgba(16,185,129,0.25)] bg-status-success hover:bg-status-success/90 hover:shadow-[0_6px_20px_rgba(16,185,129,0.4)] transition-all text-white"
                 >
-                  <Check className="w-4 h-4 mr-2" /> Concluir
+                  <Check className="w-4 h-4 mr-2" />
+                  {isSubmitting ? 'Salvando...' : 'Concluir'}
                 </Button>
               )}
             </div>
@@ -327,10 +361,10 @@ const AddPlatform = () => {
             </h3>
             <div className="pointer-events-none w-full shadow-elevation rounded-xl">
               <PlatformCard
-                id={formData.id}
+                id="preview"
                 title={formData.name}
                 description={formData.description}
-                icon={formData.icon}
+                icon={previewIcon}
                 status={formData.status}
                 category={formData.category}
                 accessLevel="full"

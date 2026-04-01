@@ -129,3 +129,50 @@ npm run build
 ```
 
 Os arquivos otimizados serão gerados na pasta `dist/` e estarão prontos para deploy.
+
+## 🌐 Deploy com Traefik
+
+Este repositório agora inclui um `compose.yml` pronto para publicar a aplicação atrás de um Traefik já existente, usando o domínio `console.antrop-ia.com`.
+
+### O que é publicado
+
+- Frontend React em `/`
+- Backend Express em `/api`
+- Health check do backend em `/health`
+
+### Pré-requisitos
+
+- Docker e Docker Compose instalados
+- Um Traefik já rodando no host
+- Uma rede Docker externa já criada para o Traefik
+- DNS de `console.antrop-ia.com` apontando para o servidor
+
+### Configuração
+
+1. Copie o arquivo de exemplo:
+
+```bash
+cp deploy/traefik.env.example deploy/traefik.env
+```
+
+2. Ajuste os valores em `deploy/traefik.env`:
+
+- `TRAEFIK_HOST=console.antrop-ia.com`
+- `TRAEFIK_NETWORK=traefik`
+- `TRAEFIK_ENTRYPOINTS=websecure`
+- `TRAEFIK_CERTRESOLVER=letsencrypt`
+- `JWT_SECRET` com um valor forte
+- `SEED_ON_START=true` no primeiro boot se quiser criar os usuários e plataformas iniciais
+
+### Subida
+
+```bash
+docker compose --env-file deploy/traefik.env up -d --build
+```
+
+### Observações
+
+- O backend usa `TRUST_PROXY=1` no deploy para funcionar corretamente atrás do Traefik.
+- O banco SQLite fica persistido no volume Docker `portal_console_data`.
+- Com `SEED_ON_START=true`, o backend cria o admin `admin@portal.com / Admin123` e os dados iniciais uma única vez por volume.
+- Se o nome da rede ou do `certresolver` do seu Traefik for diferente, basta ajustar no arquivo `deploy/traefik.env`.

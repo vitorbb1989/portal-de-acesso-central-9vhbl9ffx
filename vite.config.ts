@@ -10,6 +10,16 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: '::',
     port: 8080,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3333',
+        changeOrigin: true,
+      },
+      '/health': {
+        target: 'http://localhost:3333',
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: mode === 'development' ? 'dev-dist' : 'dist',

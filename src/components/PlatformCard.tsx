@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2, ExternalLink, Lock, Maximize2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { StatusBadge } from './StatusBadge'
-import { PlatformStatus } from '@/lib/mock-data'
+import { type PlatformStatus } from '@/lib/platforms'
 import { useAppStore } from '@/stores/main'
 
 export interface PlatformCardProps {
@@ -42,7 +42,7 @@ export function PlatformCard({
   index = 0,
   openMode = 'new_tab',
 }: PlatformCardProps) {
-  const { navigationPreference } = useAppStore()
+  const { navigationPreference, recordPlatformAccess } = useAppStore()
   const [isConnecting, setIsConnecting] = useState(false)
   const navigate = useNavigate()
 
@@ -66,11 +66,19 @@ export function PlatformCard({
     )
   }
 
-  const handleAccess = (e: React.MouseEvent) => {
+  const handleAccess = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     if (isRestricted || isOffline) return
     setIsConnecting(true)
+
+    if (effectiveOpenMode !== 'internal') {
+      try {
+        await recordPlatformAccess(id)
+      } catch {
+        // O acesso continua mesmo se o log falhar.
+      }
+    }
 
     setTimeout(() => {
       setIsConnecting(false)
@@ -85,7 +93,7 @@ export function PlatformCard({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
-      handleAccess(e as any)
+      void handleAccess(e as unknown as React.MouseEvent)
     }
   }
 
@@ -154,7 +162,7 @@ export function PlatformCard({
             )}
             onClick={(e) => {
               e.stopPropagation()
-              handleAccess(e)
+              void handleAccess(e)
             }}
           >
             {isConnecting ? (

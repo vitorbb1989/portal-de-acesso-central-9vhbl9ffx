@@ -8,9 +8,24 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
+import { ErrorState } from '@/components/ErrorState'
 
 const Logs = () => {
-  const { logs } = useAppStore()
+  const { logs, isLoading, error, retryFetch } = useAppStore()
+
+  if (error) {
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Logs de Acesso</h1>
+          <p className="text-muted-foreground">
+            Histórico de acessos recentes às plataformas integradas.
+          </p>
+        </div>
+        <ErrorState error={error} onRetry={retryFetch} />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -32,18 +47,33 @@ const Logs = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {logs.map((log) => (
-              <TableRow key={log.id} className="hover:bg-muted/50 transition-colors">
-                <TableCell className="font-medium">{log.user}</TableCell>
-                <TableCell>
-                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary">
-                    {log.platform}
-                  </span>
-                </TableCell>
-                <TableCell className="text-muted-foreground font-mono text-xs">{log.ip}</TableCell>
-                <TableCell className="text-right text-muted-foreground">{log.timestamp}</TableCell>
-              </TableRow>
-            ))}
+            {isLoading &&
+              Array.from({ length: 6 }).map((_, index) => (
+                <TableRow key={`loading-${index}`}>
+                  <TableCell className="font-medium text-muted-foreground">Carregando...</TableCell>
+                  <TableCell className="text-muted-foreground">-</TableCell>
+                  <TableCell className="text-muted-foreground">-</TableCell>
+                  <TableCell className="text-right text-muted-foreground">-</TableCell>
+                </TableRow>
+              ))}
+
+            {!isLoading &&
+              logs.map((log) => (
+                <TableRow key={log.id} className="hover:bg-muted/50 transition-colors">
+                  <TableCell className="font-medium">{log.user}</TableCell>
+                  <TableCell>
+                    <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary">
+                      {log.platform}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground font-mono text-xs">
+                    {log.ip}
+                  </TableCell>
+                  <TableCell className="text-right text-muted-foreground">
+                    {log.timestamp}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </Card>

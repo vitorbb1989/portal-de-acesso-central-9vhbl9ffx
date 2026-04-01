@@ -18,7 +18,7 @@ import {
 export default function PlatformViewer() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { platforms } = useAppStore()
+  const { platforms, recordPlatformAccess } = useAppStore()
   const [isLoading, setIsLoading] = useState(true)
 
   const platform = platforms.find((p) => p.id === id)
@@ -116,7 +116,10 @@ export default function PlatformViewer() {
         <iframe
           src={platform.url}
           className="w-full h-full border-0"
-          onLoad={() => setIsLoading(false)}
+          onLoad={() => {
+            setIsLoading(false)
+            void recordPlatformAccess(platform.id).catch(() => undefined)
+          }}
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           title={`Visualizador de ${platform.name}`}
         />

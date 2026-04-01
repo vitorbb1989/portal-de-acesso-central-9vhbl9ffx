@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { PlatformStatus } from '@/lib/mock-data'
+import { type PlatformStatus } from '@/lib/platforms'
 
 export interface StatusBadgeProps {
   status: PlatformStatus

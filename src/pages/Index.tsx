@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 
 const Index = () => {
-  const { platforms, searchQuery, isLoading, error, retryFetch, branding } = useAppStore()
+  const { platforms, searchQuery, isLoading, error, retryFetch, branding, user } = useAppStore()
 
   const displayedPlatforms = searchQuery ? platforms : platforms.slice(0, 4)
 
@@ -91,16 +91,18 @@ const Index = () => {
           </div>
         </div>
 
-        <Button
-          asChild
-          size="sm"
-          className="h-9 px-4 font-bold shadow-sm hover:shadow-md hover:bg-primary/90 transition-all text-xs"
-        >
-          <Link to="/platforms/new">
-            <Plus className="mr-1.5 h-4 w-4" strokeWidth={2.5} />
-            Nova Plataforma
-          </Link>
-        </Button>
+        {user?.role === 'ADMIN' && (
+          <Button
+            asChild
+            size="sm"
+            className="h-9 px-4 font-bold shadow-sm hover:shadow-md hover:bg-primary/90 transition-all text-xs"
+          >
+            <Link to="/platforms/new">
+              <Plus className="mr-1.5 h-4 w-4" strokeWidth={2.5} />
+              Nova Plataforma
+            </Link>
+          </Button>
+        )}
       </section>
 
       {!searchQuery && !isLoading && !error && platforms.length > 0 && (

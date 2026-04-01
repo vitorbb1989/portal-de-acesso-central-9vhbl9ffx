@@ -1,4 +1,5 @@
-import { useAppStore, NavigationPreference } from '@/stores/main'
+import { useEffect, useState } from 'react'
+import { useAppStore } from '@/stores/main'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
@@ -6,9 +7,89 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useToast } from '@/hooks/use-toast'
+import { type NavigationPreference } from '@/lib/platforms'
 
 const Settings = () => {
-  const { navigationPreference, setNavigationPreference } = useAppStore()
+  const {
+    navigationPreference,
+    notificationsEnabled,
+    user,
+    setNavigationPreference,
+    setNotificationsEnabled,
+    updateProfile,
+  } = useAppStore()
+  const { toast } = useToast()
+  const [name, setName] = useState(user?.name || '')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [isSavingProfile, setIsSavingProfile] = useState(false)
+  const [isSavingSettings, setIsSavingSettings] = useState(false)
+
+  useEffect(() => {
+    setName(user?.name || '')
+  }, [user?.name])
+
+  const handleProfileSave = async () => {
+    setIsSavingProfile(true)
+
+    try {
+      await updateProfile({
+        name: name.trim() || undefined,
+        currentPassword: currentPassword || undefined,
+        newPassword: newPassword || undefined,
+      })
+      setCurrentPassword('')
+      setNewPassword('')
+      toast({
+        title: 'Perfil atualizado',
+        description: 'Suas informações foram salvas com sucesso.',
+      })
+    } catch (error) {
+      toast({
+        title: 'Falha ao salvar perfil',
+        description:
+          error instanceof Error ? error.message : 'Não foi possível salvar suas alterações.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSavingProfile(false)
+    }
+  }
+
+  const handleNavigationChange = async (value: NavigationPreference) => {
+    setIsSavingSettings(true)
+
+    try {
+      await setNavigationPreference(value)
+    } catch (error) {
+      toast({
+        title: 'Falha ao salvar preferência',
+        description:
+          error instanceof Error ? error.message : 'Não foi possível atualizar a preferência.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSavingSettings(false)
+    }
+  }
+
+  const handleNotificationsChange = async (checked: boolean) => {
+    setIsSavingSettings(true)
+
+    try {
+      await setNotificationsEnabled(checked)
+    } catch (error) {
+      toast({
+        title: 'Falha ao salvar notificação',
+        description:
+          error instanceof Error ? error.message : 'Não foi possível atualizar essa configuração.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSavingSettings(false)
+    }
+  }
 
   return (
     <div className="space-y-6 animate-fade-in max-w-4xl">
@@ -29,14 +110,38 @@ const Settings = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Nome Completo</Label>
-                <Input id="name" defaultValue="Arthur Silva" />
+                <Input id="name" value={name} onChange={(event) => setName(event.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">E-mail Corporativo</Label>
-                <Input id="email" defaultValue="arthur.silva@acmecorp.com" disabled />
+                <Input id="email" defaultValue={user?.email} disabled />
               </div>
             </div>
-            <Button className="mt-4">Salvar Alterações</Button>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="current-password">Senha Atual</Label>
+                <Input
+                  id="current-password"
+                  type="password"
+                  value={currentPassword}
+                  onChange={(event) => setCurrentPassword(event.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-password">Nova Senha</Label>
+                <Input
+                  id="new-password"
+                  type="password"
+                  value={newPassword}
+                  onChange={(event) => setNewPassword(event.target.value)}
+                />
+              </div>
+            </div>
+
+            <Button className="mt-4" disabled={isSavingProfile} onClick={handleProfileSave}>
+              {isSavingProfile ? 'Salvando...' : 'Salvar Alterações'}
+            </Button>
           </CardContent>
         </Card>
 
@@ -53,7 +158,7 @@ const Settings = () => {
                   Receba alertas quando houver instabilidade em sistemas favoritos.
                 </p>
               </div>
-              <Switch defaultChecked />
+              <Switch checked={notificationsEnabled} onCheckedChange={handleNotificationsChange} />
             </div>
 
             <Separator />
@@ -81,7 +186,7 @@ const Settings = () => {
               </div>
               <RadioGroup
                 value={navigationPreference}
-                onValueChange={(v) => setNavigationPreference(v as NavigationPreference)}
+                onValueChange={(value) => void handleNavigationChange(value as NavigationPreference)}
                 className="flex flex-col space-y-2 mt-4"
               >
                 <div className="flex items-center space-x-2">
@@ -104,6 +209,10 @@ const Settings = () => {
                 </div>
               </RadioGroup>
             </div>
+
+            {isSavingSettings && (
+              <p className="text-xs font-medium text-muted-foreground">Salvando preferências...</p>
+            )}
           </CardContent>
         </Card>
       </div>

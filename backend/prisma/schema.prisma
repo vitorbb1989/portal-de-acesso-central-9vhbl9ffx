@@ -1,0 +1,93 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("USER") // "ADMIN" | "USER"
+  deletedAt DateTime? // soft delete
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  logs AccessLog[]
+
+  @@map("users")
+}
+
+model Platform {
+  id           String    @id @default(cuid())
+  name         String
+  description  String
+  category     String
+  status       String    @default("online") // "online" | "warning" | "offline"
+  icon         String?   // icon name (lucide-react)
+  color        String?
+  url          String
+  hasAccess    Boolean   @default(true)
+  openMode     String    @default("default") // "default" | "new_tab" | "internal"
+  lastAccessed DateTime?
+  deletedAt    DateTime? // soft delete
+  createdBy    String?   // userId de quem criou
+  updatedBy    String?   // userId de quem atualizou por último
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  logs AccessLog[]
+
+  @@index([category])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("platforms")
+}
+
+model AccessLog {
+  id           String   @id @default(cuid())
+  userName     String
+  platformName String
+  ip           String
+  timestamp    DateTime @default(now())
+
+  userId     String?
+  platformId String?
+
+  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  platform Platform? @relation(fields: [platformId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([platformId])
+  @@index([timestamp])
+  @@map("access_logs")
+}
+
+// Singleton — usar findFirst() para obter o registro único
+model BrandingConfig {
+  id         String  @id @default(cuid())
+  name       String
+  subtitle   String?
+  logoUrl    String?
+  iconUrl    String?
+  faviconUrl String?
+
+  @@map("branding_config")
+}
+
+// Singleton — usar findFirst() para obter o registro único
+model AppSettings {
+  id                    String  @id @default(cuid())
+  navigationPreference  String  @default("default") // "default" | "always_new_tab" | "always_internal"
+  notificationsEnabled  Boolean @default(true)
+  theme                 String  @default("system") // "light" | "dark" | "system"
+
+  @@map("app_settings")
+}

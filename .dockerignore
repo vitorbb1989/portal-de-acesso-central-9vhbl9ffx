@@ -1,0 +1,14 @@
+node_modules
+dist
+dev-dist
+.git
+.codex
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+backend/node_modules
+backend/dist
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/.env
