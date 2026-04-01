@@ -15,7 +15,7 @@ export default function Login() {
   const { toast } = useToast()
   const { branding, isReady, isAuthenticated, isAuthSubmitting, signIn, register } = useAppStore()
   const [mode, setMode] = useState<'login' | 'register'>('login')
-  const [loginData, setLoginData] = useState({ email: 'admin@portal.com', password: 'Admin123' })
+  const [loginData, setLoginData] = useState({ email: '', password: '' })
   const [registerData, setRegisterData] = useState({ name: '', email: '', password: '' })
 
   const redirectTo = useMemo(() => {
@@ -106,12 +106,12 @@ export default function Login() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm">
-              <p className="text-sm font-bold text-slate-900">Login seed</p>
-              <p className="mt-1 text-sm text-slate-600">Admin: `admin@portal.com` / `Admin123`</p>
+              <p className="text-sm font-bold text-slate-900">Acesso centralizado</p>
+              <p className="mt-1 text-sm text-slate-600">Gerencie todas as plataformas do workspace em um s lugar.</p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm">
-              <p className="text-sm font-bold text-slate-900">Novo ambiente</p>
-              <p className="mt-1 text-sm text-slate-600">Se o banco estiver vazio, você pode começar pelo cadastro.</p>
+              <p className="text-sm font-bold text-slate-900">Primeiro acesso?</p>
+              <p className="mt-1 text-sm text-slate-600">Crie sua conta na aba Cadastrar para começar.</p>
             </div>
           </div>
         </section>
