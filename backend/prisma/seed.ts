@@ -6,8 +6,8 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Iniciando seed do banco de dados...')
 
-  const passwordHash = await bcrypt.hash('Admin123', 10)
-  const userPasswordHash = await bcrypt.hash('User1234', 10)
+  const passwordHash = await bcrypt.hash('Antrop1a', 10)
+  const userPasswordHash = await bcrypt.hash('Antrop1a', 10)
 
   // Timestamps recentes (últimos 7 dias)
   const now = new Date()
@@ -25,7 +25,7 @@ async function main() {
 
     // Usuários
     const admin = await tx.user.create({
-      data: { name: 'Admin', email: 'admin@portal.com', password: passwordHash, role: 'ADMIN' },
+      data: { name: 'Administrador', email: 'admin@antrop-ia.com', password: passwordHash, role: 'ADMIN' },
     })
 
     const ana = await tx.user.create({
@@ -155,8 +155,8 @@ async function main() {
 
   console.log('\n🎉 Seed concluído com sucesso (dentro de transaction)')
   console.log('\n📋 Usuários para login:')
-  console.log('  Admin: admin@portal.com / Admin123')
-  console.log('  User:  ana.silva@portal.com / User1234')
+  console.log('  Admin: admin@antrop-ia.com / Antrop1a')
+  console.log('  User:  ana.silva@portal.com / Antrop1a')
 }
 
 main()

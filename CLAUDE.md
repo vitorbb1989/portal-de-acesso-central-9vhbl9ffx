@@ -47,8 +47,8 @@ npx tsc --noEmit   # Verificação de tipos
 - Path alias: `@/*` → `./src/*`
 
 ## Credenciais Seed (desenvolvimento)
-- **Admin:** admin@portal.com / Admin123
-- **User:** ana.silva@portal.com / User1234
+- **Admin:** admin@antrop-ia.com / Antrop1a
+- **User:** ana.silva@portal.com / Antrop1a
 
 ## Regras Importantes
 - **Nunca** commitar `.env` com secrets reais
